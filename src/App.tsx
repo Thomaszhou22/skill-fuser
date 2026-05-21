@@ -163,29 +163,30 @@ const DEMO_MERGED: Record<string, string> = {
 export default function App() {
   /* ─── State ─── */
   const [skills, setSkills] = useState<SkillInput[]>(() => loadJSON('skills', [{ id: uid(), name: '', content: '' }]))
-  const [budget, setBudget] = useState(() => loadJSON('budget', 2000))
+  const [ratio, setRatio] = useState(() => loadJSON('ratio', 50))
   const [providers, setProviders] = useState<ProviderConfig[]>(() => loadJSON('providers', DEFAULT_PROVIDERS))
   const [provId, setProvId] = useState(() => loadJSON('active-provider', ''))
   const [model, setModel] = useState(() => loadJSON('active-model', ''))
-  const [result, setResult] = useState('')
+  const [result, setResult] = useState(() => loadJSON('result', ''))
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [mode, setMode] = useState<FuseMode>('fusion')
+  const [mode, setMode] = useState<FuseMode>(() => loadJSON('mode', 'fusion'))
   const [modal, setModal] = useState<Modal>('none')
   const [history, setHistory] = useState<HistoryEntry[]>(() => loadJSON('history', []))
   const [favorites, setFavorites] = useState<FavoriteEntry[]>(() => loadJSON('favorites', []))
   const [historySearch, setHistorySearch] = useState('')
   const [favName, setFavName] = useState('')
   const [editingProv, setEditingProv] = useState<string | null>(null)
-  const [fusionGroups, setFusionGroups] = useState<FusionGroup[]>([])
+  const [fusionGroups, setFusionGroups] = useState<FusionGroup[]>(() => loadJSON('fusionGroups', []))
   const [phase, setPhase] = useState<'idle' | 'classifying' | 'merging' | 'done'>('idle')
   const fileRefs = useRef<Record<string, HTMLInputElement | null>>({})
   const importRef = useRef<HTMLInputElement>(null)
 
   const prov = providers.find(p => p.id === provId)
   const totalTok = skills.reduce((s, k) => s + estimateTokens(k.content), 0)
+  const budget = totalTok > 0 ? Math.max(1, Math.round(totalTok * ratio / 100)) : 0
   const outTok = estimateTokens(result)
-  const ratio = totalTok > 0 && outTok > 0 ? Math.round((1 - outTok / totalTok) * 100) : 0
+  const compressionRatio = totalTok > 0 && outTok > 0 ? Math.round((1 - outTok / totalTok) * 100) : 0
 
   /* ─── Demo Run ─── */
   const runDemo = useCallback(async () => {
@@ -241,7 +242,10 @@ export default function App() {
   useEffect(() => { saveJSON('history', history) }, [history])
   useEffect(() => { saveJSON('favorites', favorites) }, [favorites])
   useEffect(() => { saveJSON('skills', skills) }, [skills])
-  useEffect(() => { saveJSON('budget', budget) }, [budget])
+  useEffect(() => { saveJSON('ratio', ratio) }, [ratio])
+  useEffect(() => { saveJSON('result', result) }, [result])
+  useEffect(() => { saveJSON('mode', mode) }, [mode])
+  useEffect(() => { saveJSON('fusionGroups', fusionGroups) }, [fusionGroups])
 
   const setProv = (id: string, u: Partial<ProviderConfig>) => setProviders(ps => ps.map(p => p.id === id ? { ...p, ...u } : p))
 
@@ -400,7 +404,7 @@ Output ONLY valid JSON array: [{"name":"...","category":"..."}]. No explanation,
 
   /* ─── Data Management ─── */
   const exportData = () => {
-    const data = { providers, history, favorites, settings: { provId, model, budget } }
+    const data = { providers, history, favorites, settings: { provId, model, ratio } }
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `markdown-fuser-backup-${new Date().toISOString().slice(0, 10)}.json`; a.click()
   }
@@ -413,7 +417,7 @@ Output ONLY valid JSON array: [{"name":"...","category":"..."}]. No explanation,
         if (d.providers) setProviders(d.providers)
         if (d.history) setHistory(d.history)
         if (d.favorites) setFavorites(d.favorites)
-        if (d.settings) { setProvId(d.settings.provId || ''); setModel(d.settings.model || ''); setBudget(d.settings.budget || 2000) }
+        if (d.settings) { setProvId(d.settings.provId || ''); setModel(d.settings.model || ''); setRatio(d.settings.ratio || 50) }
         alert('Import successful!')
       } catch { alert('Invalid backup file') }
     }
@@ -427,8 +431,11 @@ Output ONLY valid JSON array: [{"name":"...","category":"..."}]. No explanation,
     localStorage.removeItem(STORAGE_KEY + 'active-provider')
     localStorage.removeItem(STORAGE_KEY + 'active-model')
     localStorage.removeItem(STORAGE_KEY + 'skills')
-    localStorage.removeItem(STORAGE_KEY + 'budget')
-    setProviders(DEFAULT_PROVIDERS); setHistory([]); setFavorites([]); setProvId(''); setModel(''); setResult(''); setSkills([{ id: uid(), name: '', content: '' }]); setBudget(2000)
+    localStorage.removeItem(STORAGE_KEY + 'ratio')
+    localStorage.removeItem(STORAGE_KEY + 'result')
+    localStorage.removeItem(STORAGE_KEY + 'mode')
+    localStorage.removeItem(STORAGE_KEY + 'fusionGroups')
+    setProviders(DEFAULT_PROVIDERS); setHistory([]); setFavorites([]); setProvId(''); setModel(''); setResult(''); setSkills([{ id: uid(), name: '', content: '' }]); setRatio(50); setFusionGroups([]); setMode('fusion')
   }
 
   /* ─── Storage Size ─── */
@@ -508,20 +515,19 @@ Output ONLY valid JSON array: [{"name":"...","category":"..."}]. No explanation,
                 Target Output
                 <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2.5 rounded-lg bg-gray-800 text-white text-[10px] leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
                   <span className="font-semibold text-amber-400">How Target Output works:</span><br />
-                  Higher token count = more detailed fusion result with better preservation of rules, examples, and edge cases.<br /><br />
-                  Lower token count = aggressive compression, keeps only core rules. May lose important details.<br /><br />
-                  <span className="text-gray-400">Recommended: 30-50% of input tokens for balanced results.</span>
+                  Select compression ratio. Lower % = more aggressive compression, keeps only core rules.<br /><br />
+                  Higher % = preserves more details, examples, and edge cases.<br /><br />
+                  <span className="text-gray-400">Recommended: 30-50% for balanced results.</span>
                   <span className="absolute top-full left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-800 rotate-45 -mt-1" />
                 </span>
               </span>
-              <input type="range" min={0} max={Math.max(totalTok, 200)} step={Math.max(1, Math.floor(totalTok / 50))} value={budget} onChange={e => setBudget(+e.target.value)} className="w-20 accent-amber-500" />
-              <input type="number" min={0} max={Math.max(totalTok, 200)} value={budget} onChange={e => setBudget(Math.min(+e.target.value, totalTok || 200))} className="w-16 bg-[#f5f0e8] border border-[#e0d8c8] rounded-md px-2 py-0.5 text-[11px] text-center focus:outline-none focus:border-amber-500/50 font-mono" />
-              <span className="text-[10px] text-gray-400">tokens (from {totalTok} input)</span>
+              <div className="flex gap-1">{[10, 20, 30, 40, 50, 60, 70, 80, 90].map(r => (<button key={r} onClick={() => setRatio(r)} className={`px-2 py-0.5 rounded text-[10px] font-medium transition ${ratio === r ? 'bg-amber-500 text-white' : 'bg-[#f5f0e8] text-gray-500 hover:bg-amber-100'}`}>{r}%</button>))}</div>
+              <span className="text-[10px] text-gray-400">~{budget} tokens</span>
             </div>
           )}
           {outTok > 0 && (
             <div className="ml-auto flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-50 border border-green-200">
-              <span className="text-[11px] text-green-600 font-medium">{ratio}% compressed</span>
+              <span className="text-[11px] text-green-600 font-medium">{compressionRatio}% compressed</span>
               <span className="text-[10px] text-green-500 font-mono">{outTok} tok</span>
             </div>
           )}
