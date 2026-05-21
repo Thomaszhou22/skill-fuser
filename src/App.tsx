@@ -587,6 +587,28 @@ export default function App() {
     r.readAsText(f)
   }
 
+  /* ─── Drag & Drop ─── */
+  const [dragOver, setDragOver] = useState(false)
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault(); setDragOver(false)
+    const files = Array.from(e.dataTransfer.files).filter(f => /\.(md|markdown|txt)$/i.test(f.name))
+    if (!files.length) return
+    const readers = files.map(f => new Promise<{ name: string; content: string }>((res, rej) => {
+      const r = new FileReader()
+      r.onload = ev => res({ name: f.name.replace(/\.(md|markdown|txt)$/i, ''), content: ev.target?.result as string })
+      r.onerror = rej
+      r.readAsText(f)
+    }))
+    Promise.all(readers).then(results => {
+      const newSkills = results.map(r => ({ id: uid(), name: r.name, content: r.content }))
+      setSkills(prev => {
+        const empty = prev.filter(s => !s.content.trim())
+        const filled = prev.filter(s => s.content.trim())
+        return [...filled, ...newSkills, ...empty.slice(results.length > empty.length ? 0 : undefined)]
+      })
+    })
+  }, [])
+
   /* ─── Build Prompt ─── */
   /* ─── LLM Call Helper ─── */
   const callLLM = useCallback(async (sys: string, usr: string, maxT: number): Promise<string> => {
@@ -848,7 +870,11 @@ Output ONLY valid JSON array: [{"name":"...","category":"..."}]. No explanation,
               </div>
               <button onClick={() => setSkills([...skills, { id: uid(), name: '', content: '' }])} className="text-[11px] text-amber-600 hover:text-amber-700 font-medium">+ Add File</button>
             </div>
-            <div className="p-3 space-y-2 max-h-[400px] overflow-y-auto">
+            <div className={`p-3 space-y-2 max-h-[400px] overflow-y-auto transition-colors ${dragOver ? 'bg-amber-50/50' : ''}`}
+              onDragOver={e => { e.preventDefault(); setDragOver(true) }}
+              onDragLeave={() => setDragOver(false)}
+              onDrop={handleDrop}
+            >
               {skills.map((s, i) => (
                 <div key={s.id} className="rounded-lg border border-[#e8e0d0] overflow-hidden">
                   <div className="flex items-center justify-between px-3 py-1.5 border-b border-[#ece4d4] bg-[#faf6ee]">
