@@ -200,7 +200,7 @@ Keep safety/error/numbered procedures verbatim. Drop motivation, merge variants,
             <button onClick={() => setModal('history')} className="px-2.5 py-1.5 rounded-lg text-[11px] text-gray-500 hover:text-gray-700 hover:bg-white border border-transparent hover:border-[#e0d8c8] transition">History</button>
             <button onClick={() => setModal('data')} className="px-2.5 py-1.5 rounded-lg text-[11px] text-gray-500 hover:text-gray-700 hover:bg-white border border-transparent hover:border-[#e0d8c8] transition">Data</button>
             <button onClick={() => setModal('settings')} className={`px-3 py-1.5 rounded-lg text-[11px] font-medium transition-all ${prov?.apiKey ? 'bg-white border border-[#e0d8c8] text-gray-600 hover:bg-gray-50' : 'bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow shadow-amber-600/20'}`}>
-              {prov?.apiKey ? 'Model Settings' : 'Get Started'}
+              {prov?.apiKey ? 'Model Settings' : 'Add API Key'}
             </button>
           </div>
         </div>
@@ -304,7 +304,7 @@ Keep safety/error/numbered procedures verbatim. Drop motivation, merge variants,
               <button onClick={fuse} disabled={loading || !prov?.apiKey} className={`w-full py-2 rounded-lg text-xs font-semibold transition-all disabled:opacity-30 disabled:cursor-not-allowed ${mode === 'analysis' ? 'bg-gradient-to-r from-amber-600 to-orange-500 hover:from-amber-500 hover:to-orange-400 text-white shadow shadow-orange-500/20' : 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-white shadow shadow-amber-600/20'}`}>
                 {loading ? <span className="flex items-center justify-center gap-2"><svg className="animate-spin h-3.5 w-3.5" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" fill="none" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>Processing...</span> : mode === 'analysis' ? 'Analyze Content' : 'Start Fusion'}
               </button>
-              {!prov?.apiKey && !loading && <p className="text-[10px] text-center text-gray-400 mt-1.5">Click "Get Started" (top-right) to configure your API Key</p>}
+              {!prov?.apiKey && !loading && <p className="text-[10px] text-center text-gray-400 mt-1.5">Click "Add API Key" (top-right) to connect your AI model</p>}
             </div>
           </div>
 
