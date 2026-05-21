@@ -8,9 +8,164 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Deploy with Vercel](https://img.shields.io/badge/Vercel-indigo?style=flat&logo=vercel)](https://markdown-fuser.vercel.app)
 
-[🌐 在线使用](https://markdown-fuser.vercel.app) | [📦 GitHub](https://github.com/Thomaszhou22/markdown-fuser) | [📖 技术背景](#-研究背景)
+[🌐 Live Demo](https://markdown-fuser.vercel.app) | [📦 GitHub](https://github.com/Thomaszhou22/markdown-fuser) | [📖 Research](#-research-background)
 
 </div>
+
+---
+
+<a id="english"></a>
+
+## 📖 Introduction
+
+Markdown Fuser is an AI-powered **Skill file merger & compressor**. When you have many SKILL.md files for AI Agents, each load costs tokens. This tool helps you:
+
+- 📚 **Merge multiple Skill files** — upload or paste multiple .md files
+- 🎯 **Control Token budget** — set output limit, auto-compress to fit
+- 🧠 **Smart deduplication** — based on [SkillReducer](https://arxiv.org/abs/2603.29919) research methodology
+- 🔬 **Content analysis** — classify each paragraph: Core Rule / Background / Example / Template / Redundant
+
+> Research shows only **38.5%** of Skill content is actionable core rules. Removing non-essential content actually **improves** Agent performance by **2.8%** (less-is-more effect).
+
+## 🎥 Feature Demo
+
+### Fusion Mode
+Paste multiple SKILL.md files → set Token budget → one-click merge & deduplicate → output optimized Skill file
+
+### Analysis Mode
+Upload Skill files → AI classifies every paragraph → output statistics report + recommended budget
+
+## ✨ Core Features
+
+- 🔀 **Smart Merge** — deduplicate and combine multiple files, eliminate overlapping content
+- 🎯 **Token Budget Control** — precisely set output token limit
+- 🧠 **SkillReducer Methodology** — 5-level classification → deduplication → compression → Progressive Disclosure output
+- 🔬 **Content Analysis** — per-paragraph classification: Core Rule / Background / Example / Template / Redundant
+- 🤖 **Multi-model Support** — OpenAI, Anthropic, Google Gemini, DeepSeek, custom endpoints
+- 📎 **File Upload** — drag & drop or click to upload .md / .markdown / .txt
+- 📋 **One-click Copy/Download** — copy to clipboard or download as .md file
+- 🔒 **Privacy First** — pure frontend, all data stays in your browser, never uploaded to any server
+- 📊 **Compression Stats** — real-time compression ratio and token count
+
+## 🚀 Quick Start
+
+### 1. Use Online (Recommended)
+
+Visit: **[https://markdown-fuser.vercel.app](https://markdown-fuser.vercel.app)**
+
+No signup, no install, open and use.
+
+### 2. How to Use
+
+```
+1. Click ⚙️ Model Settings (top right) → select AI provider → enter API Key → click "Enable"
+2. Paste Skill content in the left panel, or click 📎 Upload to import .md files
+3. Set Token budget (Fusion mode)
+4. Click "🔀 Start Fusion" or "🔬 Analyze Content"
+5. View results in the right panel — copy or download
+```
+
+### 3. Self-Deploy
+
+#### Vercel One-Click Deploy
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Thomaszhou22/markdown-fuser)
+
+#### Manual Deploy
+
+```bash
+git clone https://github.com/Thomaszhou22/markdown-fuser.git
+cd markdown-fuser
+npm install
+npm run build
+# Deploy the dist/ directory to any static hosting service
+```
+
+#### Local Development
+
+```bash
+git clone https://github.com/Thomaszhou22/markdown-fuser.git
+cd markdown-fuser
+npm install
+npm run dev
+# Open http://localhost:5173
+```
+
+## ⚙️ Supported AI Models
+
+| Provider | Default Model | Notes |
+|----------|--------------|-------|
+| 🟢 OpenAI | gpt-4o-mini | Supports gpt-4o, gpt-4.1 series |
+| 🟠 Anthropic | claude-sonnet-4 | Supports Claude Sonnet/Haiku |
+| 🔵 Google Gemini | gemini-2.0-flash | Supports Flash/Pro series |
+| 🟣 DeepSeek | deepseek-chat | Auto-configured endpoint |
+| ⚙️ Custom | Custom | Any OpenAI-compatible endpoint |
+
+> 💡 **Recommended**: Gemini Flash or GPT-4o-mini — fast, cheap, and good enough for compression.
+
+## 📖 Research Background
+
+This project is based on the core methodology from [SkillReducer: Optimizing LLM Agent Skills for Token Efficiency](https://arxiv.org/abs/2603.29919):
+
+### Key Findings
+
+| Finding | Data |
+|---------|------|
+| Core rules in Skill files | Only 38.5% |
+| Agent performance after removing non-essential content | **+2.8%** |
+| Max compression ratio (lossless) | 60%+ |
+
+### 5-Level Classification
+
+```
+Core Rule    → Actionable instructions (MUST keep)
+Background   → Explanations, rationale (can remove)
+Example      → Code snippets (keep on demand)
+Template     → Boilerplate formats (merge & deduplicate)
+Redundant    → Repeated content (MUST remove)
+```
+
+### Compression Pipeline
+
+```
+1. CLASSIFY    — Rate every paragraph's importance level
+2. DEDUPLICATE — Merge overlapping rules, eliminate repetition
+3. COMPRESS    — Compress to Token budget, output Progressive Disclosure structure
+```
+
+## 🗺️ Roadmap
+
+- [x] Multi-file merge & compress
+- [x] Token budget control
+- [x] Content analysis mode
+- [x] Multi-model support (OpenAI / Anthropic / Gemini / DeepSeek / Custom)
+- [x] File upload (drag & drop + click)
+- [x] Copy / Download results
+- [ ] Markdown preview rendering
+- [ ] Batch processing (multiple Skill groups at once)
+- [ ] Compression quality scoring
+- [ ] History (local storage)
+- [ ] Chrome extension
+
+## 🛠️ Tech Stack
+
+- **Framework**: React 19 + TypeScript
+- **Styling**: Tailwind CSS v4
+- **Build**: Vite 6
+- **Deploy**: Vercel
+- **AI Calls**: Direct browser-to-API (no backend)
+
+## 🤝 Contributing
+
+1. Fork this repo
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some feature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+MIT License — free to use, modify, and distribute.
 
 ---
 
@@ -133,7 +288,7 @@ Redundant    → 重复内容（必须删除）
 3. COMPRESS   — 压缩到 Token 预算内，输出 Progressive Disclosure 结构
 ```
 
-## 🗺️ Roadmap
+## 🗺️ 开发计划
 
 - [x] 多文件合并压缩
 - [x] Token 预算控制
@@ -163,161 +318,6 @@ Redundant    → 重复内容（必须删除）
 4. 推送到分支 (`git push origin feature/AmazingFeature`)
 5. 发起 Pull Request
 
-## 📄 License
+## 📄 许可证
 
 MIT License — 可自由使用、修改和商业分发。
-
----
-
----
-
-<a id="english"></a>
-
-## 📖 Introduction
-
-Markdown Fuser is an AI-powered **Skill file merger & compressor**. When you have many SKILL.md files for AI Agents, each load costs tokens. This tool helps you:
-
-- 📚 **Merge multiple Skill files** — upload or paste multiple .md files
-- 🎯 **Control Token budget** — set output limit, auto-compress to fit
-- 🧠 **Smart deduplication** — based on [SkillReducer](https://arxiv.org/abs/2603.29919) research methodology
-- 🔬 **Content analysis** — classify each paragraph: Core Rule / Background / Example / Template / Redundant
-
-> Research shows only **38.5%** of Skill content is actionable core rules. Removing non-essential content actually **improves** Agent performance by **2.8%** (less-is-more effect).
-
-## 🎥 Feature Demo
-
-### Fusion Mode
-Paste multiple SKILL.md files → set Token budget → one-click merge & deduplicate → output optimized Skill file
-
-### Analysis Mode
-Upload Skill files → AI classifies every paragraph → output statistics report + recommended budget
-
-## ✨ Core Features
-
-- 🔀 **Smart Merge** — deduplicate and combine multiple files, eliminate overlapping content
-- 🎯 **Token Budget Control** — precisely set output token limit
-- 🧠 **SkillReducer Methodology** — 5-level classification → deduplication → compression → Progressive Disclosure output
-- 🔬 **Content Analysis** — per-paragraph classification: Core Rule / Background / Example / Template / Redundant
-- 🤖 **Multi-model Support** — OpenAI, Anthropic, Google Gemini, DeepSeek, custom endpoints
-- 📎 **File Upload** — drag & drop or click to upload .md / .markdown / .txt
-- 📋 **One-click Copy/Download** — copy to clipboard or download as .md file
-- 🔒 **Privacy First** — pure frontend, all data stays in your browser, never uploaded to any server
-- 📊 **Compression Stats** — real-time compression ratio and token count
-
-## 🚀 Quick Start
-
-### 1. Use Online (Recommended)
-
-**[Try it now →](https://markdown-fuser.vercel.app)** — no signup, no install.
-
-### 2. How to Use
-
-```
-1. Click ⚙️ Model Settings (top right) → select AI provider → enter API Key → click "Enable"
-2. Paste Skill content in the left panel, or click 📎 Upload to import .md files
-3. Set Token budget (Fusion mode)
-4. Click "🔀 Start Fusion" or "🔬 Analyze Content"
-5. View results in the right panel — copy or download
-```
-
-### 3. Self-Deploy
-
-#### Vercel One-Click Deploy
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Thomaszhou22/markdown-fuser)
-
-#### Manual Deploy
-
-```bash
-git clone https://github.com/Thomaszhou22/markdown-fuser.git
-cd markdown-fuser
-npm install
-npm run build
-# Deploy the dist/ directory to any static hosting service
-```
-
-#### Local Development
-
-```bash
-git clone https://github.com/Thomaszhou22/markdown-fuser.git
-cd markdown-fuser
-npm install
-npm run dev
-# Open http://localhost:5173
-```
-
-## ⚙️ Supported AI Models
-
-| Provider | Default Model | Notes |
-|----------|--------------|-------|
-| 🟢 OpenAI | gpt-4o-mini | Supports gpt-4o, gpt-4.1 series |
-| 🟠 Anthropic | claude-sonnet-4 | Supports Claude Sonnet/Haiku |
-| 🔵 Google Gemini | gemini-2.0-flash | Supports Flash/Pro series |
-| 🟣 DeepSeek | deepseek-chat | Auto-configured endpoint |
-| ⚙️ Custom | Custom | Any OpenAI-compatible endpoint |
-
-> 💡 **Recommended**: Gemini Flash or GPT-4o-mini — fast, cheap, and good enough for compression.
-
-## 📖 Research Background
-
-This project is based on the core methodology from [SkillReducer: Optimizing LLM Agent Skills for Token Efficiency](https://arxiv.org/abs/2603.29919):
-
-### Key Findings
-
-| Finding | Data |
-|---------|------|
-| Core rules in Skill files | Only 38.5% |
-| Agent performance after removing non-essential content | **+2.8%** |
-| Max compression ratio (lossless) | 60%+ |
-
-### 5-Level Classification
-
-```
-Core Rule    → Actionable instructions (MUST keep)
-Background   → Explanations, rationale (can remove)
-Example      → Code snippets (keep on demand)
-Template     → Boilerplate formats (merge & deduplicate)
-Redundant    → Repeated content (MUST remove)
-```
-
-### Compression Pipeline
-
-```
-1. CLASSIFY    — Rate every paragraph's importance level
-2. DEDUPLICATE — Merge overlapping rules, eliminate repetition
-3. COMPRESS    — Compress to Token budget, output Progressive Disclosure structure
-```
-
-## 🗺️ Roadmap
-
-- [x] Multi-file merge & compress
-- [x] Token budget control
-- [x] Content analysis mode
-- [x] Multi-model support (OpenAI / Anthropic / Gemini / DeepSeek / Custom)
-- [x] File upload (drag & drop + click)
-- [x] Copy / Download results
-- [ ] Markdown preview rendering
-- [ ] Batch processing (multiple Skill groups at once)
-- [ ] Compression quality scoring
-- [ ] History (local storage)
-- [ ] Chrome extension
-
-## 🛠️ Tech Stack
-
-- **Framework**: React 19 + TypeScript
-- **Styling**: Tailwind CSS v4
-- **Build**: Vite 6
-- **Deploy**: Vercel
-- **AI Calls**: Direct browser-to-API (no backend)
-
-## 🤝 Contributing
-
-1. Fork this repo
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some feature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📄 License
-
-MIT License — free to use, modify, and distribute.
