@@ -8,13 +8,31 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Deploy with Vercel](https://img.shields.io/badge/Vercel-indigo?style=flat&logo=vercel)](https://markdown-fuser.vercel.app)
 
-[Live Demo](https://markdown-fuser.vercel.app) | [GitHub](https://github.com/Thomaszhou22/markdown-fuser) | [Research](#-研究背景)
+[在线演示](https://markdown-fuser.vercel.app) | [GitHub](https://github.com/Thomaszhou22/markdown-fuser) | [研究背景](#研究背景)
 
 </div>
 
 ---
 
----|------|
+<a id="中文"></a>
+
+## 项目简介
+
+Markdown Fuser 是一个 AI 驱动的工具，用于将多个 AI Agent 的 SKILL.md 文件合并压缩为优化输出。基于 [SkillReducer](https://arxiv.org/abs/2603.29919) 研究论文——研究发现 Skill 文件中只有 **38.5%** 是可执行的核心规则，删除非核心内容后 Agent 表现反而 **提升 2.8%**。
+
+## 工作原理
+
+### 合并压缩模式（核心功能）
+
+```
+上传 Skills → 按类型分类 → 同类型智能合并 → 分组展示结果
+```
+
+**第一步：AI 分类**
+每个上传的 Skill 被自动分类到 30 种类型之一（基于 [VoltAgent/awesome-openclaw-skills](https://github.com/VoltAgent/awesome-openclaw-skills) 分类体系）：
+
+| 类型 | 示例 |
+|------|------|
 | Web & 前端开发 | React 模式、CSS 规范、无障碍 |
 | AI & LLMs | Prompt 工程、模型选择、API 调用 |
 | 安全 | OWASP 检查清单、认证流程、威胁模型 |
