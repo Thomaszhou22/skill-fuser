@@ -7,6 +7,10 @@ interface ProviderConfig {
   apiKey: string; customEndpoint?: string; enabled: boolean; status: 'idle' | 'testing' | 'ok' | 'fail'
 }
 interface HistoryEntry { id: string; timestamp: number; mode: 'fusion' | 'analysis'; model: string; inputNames: string[]; inputTokens: number; output: string; outputTokens: number; budget: number }
+interface FusionGroup {
+  category: SkillCategory; label: string; canMerge: boolean; items: { name: string; content: string }[]; result?: string; loading?: boolean
+}
+type SkillCategory = 'framework' | 'reasoning' | 'debugging' | 'quality' | 'devops' | 'design' | 'workflow' | 'other'
 interface FavoriteEntry { id: string; timestamp: number; name: string; content: string; tokens: number }
 
 type FuseMode = 'fusion' | 'analysis'
@@ -15,6 +19,28 @@ type Modal = 'none' | 'settings' | 'history' | 'favorites' | 'data'
 const uid = () => Math.random().toString(36).slice(2, 8)
 const estimateTokens = (t: string) => { const c = (t.match(/[\u4e00-\u9fff\u3040-\u30ff\uac00-\ud7af]/g) || []).length; return Math.ceil(c / 2 + (t.length - c) / 4) }
 const STORAGE_KEY = 'markdown-fuser-'
+
+/* ─── Skill Categories & Prompts ─── */
+const CATEGORIES: Record<SkillCategory, { label: string; canMerge: boolean; mergePrompt: string }> = {
+  framework: { label: 'Framework Best Practices', canMerge: true, mergePrompt: `You are merging multiple framework/language best-practice skills.
+Rules: 1) Extract common rules and keep the most specific version. 2) Remove duplicate guidelines. 3) Merge overlapping sections (e.g. two "Error Handling" sections become one). 4) Keep version-specific rules separate under clear headings. 5) Convert verbose prose to concise bullet points.
+Output format: # Merged [Framework] Best Practices\n## Core Rules\n## Patterns & Conventions\n## Anti-Patterns to Avoid\n## Quick Reference` },
+  reasoning: { label: 'Reasoning & Thinking', canMerge: false, mergePrompt: '' },
+  debugging: { label: 'Debugging & Error Recovery', canMerge: true, mergePrompt: `You are merging debugging/error-recovery skills.
+Rules: 1) Combine troubleshooting checklists, removing duplicates. 2) Merge common causes lists. 3) Unify error handling procedures into a single canonical flow. 4) Keep unique debugging techniques from each source.
+Output format: # Merged Debugging Guide\n## Troubleshooting Flow\n## Common Causes Checklist\n## Error Handling Procedures\n## Quick Reference` },
+  quality: { label: 'Code Quality & Security', canMerge: true, mergePrompt: `You are merging code quality and security skills.
+Rules: 1) Combine rule lists, removing duplicates. 2) Merge security checklists. 3) Unify naming/style conventions into one set. 4) Keep unique rules from each source.
+Output format: # Merged Code Quality & Security Rules\n## Mandatory Rules\n## Security Checklist\n## Style Conventions\n## Quick Reference` },
+  devops: { label: 'DevOps & Deployment', canMerge: true, mergePrompt: `You are merging DevOps/deployment skills.
+Rules: 1) Merge deployment steps into a unified flow. 2) Combine command references. 3) Unify environment configurations. 4) Keep platform-specific sections separate.
+Output format: # Merged DevOps Guide\n## Deployment Flow\n## Command Reference\n## Environment Config\n## Platform-Specific Notes` },
+  design: { label: 'UI & Design', canMerge: true, mergePrompt: `You are merging UI/design skills.
+Rules: 1) Merge design principles into a unified set. 2) Combine component patterns. 3) Unify style guidelines. 4) Keep unique design tokens from each source.
+Output format: # Merged Design Guidelines\n## Design Principles\n## Component Patterns\n## Style Guide\n## Quick Reference` },
+  workflow: { label: 'Workflow & Process', canMerge: false, mergePrompt: '' },
+  other: { label: 'Other', canMerge: false, mergePrompt: '' },
+}
 
 /* ─── Default Providers ─── */
 const DEFAULT_PROVIDERS: ProviderConfig[] = [
@@ -48,6 +74,8 @@ export default function App() {
   const [historySearch, setHistorySearch] = useState('')
   const [favName, setFavName] = useState('')
   const [editingProv, setEditingProv] = useState<string | null>(null)
+  const [fusionGroups, setFusionGroups] = useState<FusionGroup[]>([])
+  const [phase, setPhase] = useState<'idle' | 'classifying' | 'merging' | 'done'>('idle')
   const fileRefs = useRef<Record<string, HTMLInputElement | null>>({})
   const importRef = useRef<HTMLInputElement>(null)
 
@@ -103,46 +131,109 @@ export default function App() {
   }
 
   /* ─── Build Prompt ─── */
-  const buildPrompt = () => {
-    const vs = skills.filter(s => s.content.trim())
-    const md = vs.map((s, i) => `<skill_${i + 1} name="${s.name || 'unnamed'}">\n${s.content}\n</skill_${i + 1}>`).join('\n\n')
-    if (mode === 'analysis') return {
-      sys: `Classify every section into: Core Rule / Background / Example / Template / Redundant. Output a table per skill, then statistics with percentages and recommended budget.`,
-      usr: `Analyze these ${vs.length} skills:\n\n${md}`
+  /* ─── LLM Call Helper ─── */
+  const callLLM = useCallback(async (sys: string, usr: string, maxT: number): Promise<string> => {
+    if (!prov?.apiKey) throw new Error('No API Key')
+    const m = model || prov.defaultModel
+    if (prov.id === 'anthropic') {
+      const r = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-api-key': prov.apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' }, body: JSON.stringify({ model: m, max_tokens: maxT, system: sys, messages: [{ role: 'user', content: usr }] }) })
+      const d = await r.json(); if (d.error) throw new Error(d.error.message); return d.content?.[0]?.text || ''
+    } else if (prov.id === 'google') {
+      const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${prov.apiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ systemInstruction: { parts: [{ text: sys }] }, contents: [{ parts: [{ text: usr }] }], generationConfig: { temperature: 0.2, maxOutputTokens: maxT } }) })
+      const d = await r.json(); if (d.error) throw new Error(d.error.message); return d.candidates?.[0]?.content?.parts?.[0]?.text || ''
+    } else {
+      const r = await fetch(prov.customEndpoint || 'https://api.openai.com/v1/chat/completions', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${prov.apiKey}` }, body: JSON.stringify({ model: m, messages: [{ role: 'system', content: sys }, { role: 'user', content: usr }], temperature: 0.2, max_tokens: maxT }) })
+      const d = await r.json(); if (d.error) throw new Error(d.error.message); return d.choices?.[0]?.message?.content || ''
     }
-    return {
-      sys: `You are a SkillReducer fusion engine. Merge ${vs.length} skill docs into <=${budget} tokens (from ~${totalTok}).
-Pipeline: 1) Classify sections 2) Deduplicate 3) Compress.
-Output: # Title>description\n## Mandatory Rules\n## Workflows\n## Quick Reference\n## Red Flags
-Keep safety/error/numbered procedures verbatim. Drop motivation, merge variants, convert prose to bullets. Markdown only.`,
-      usr: `Fuse into <=${budget} tokens:\n\n${md}`
-    }
-  }
+  }, [prov, model])
 
   /* ─── Run Fusion/Analysis ─── */
   const fuse = useCallback(async () => {
     if (!prov?.apiKey) { setError('Please configure an API Key first (top-right Model Settings)'); return }
     if (!skills.some(s => s.content.trim())) { setError('Please add at least one Skill file'); return }
-    setLoading(true); setError(''); setResult('')
-    const { sys, usr } = buildPrompt()
+    setLoading(true); setError(''); setResult(''); setFusionGroups([])
     const m = model || prov.defaultModel
-    const maxT = Math.min(budget * 2, 16000)
+    const vs = skills.filter(s => s.content.trim())
+    const md = vs.map((s, i) => `<skill_${i + 1} name="${s.name || 'unnamed'}">
+${s.content}
+</skill_${i + 1}>`).join('\n\n')
+
     try {
-      let t = ''
-      if (prov.id === 'anthropic') {
-        const r = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-api-key': prov.apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' }, body: JSON.stringify({ model: m, max_tokens: maxT, system: sys, messages: [{ role: 'user', content: usr }] }) })
-        const d = await r.json(); if (d.error) throw new Error(d.error.message); t = d.content?.[0]?.text || ''
-      } else if (prov.id === 'google') {
-        const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${prov.apiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ systemInstruction: { parts: [{ text: sys }] }, contents: [{ parts: [{ text: usr }] }], generationConfig: { temperature: 0.2, maxOutputTokens: maxT } }) })
-        const d = await r.json(); if (d.error) throw new Error(d.error.message); t = d.candidates?.[0]?.content?.parts?.[0]?.text || ''
+      if (mode === 'analysis') {
+        setPhase('classifying')
+        const t = await callLLM(
+          `Classify every section into: Core Rule / Background / Example / Template / Redundant. Output a table per skill, then statistics with percentages and recommended budget.`,
+          `Analyze these ${vs.length} skills:\n\n${md}`,
+          Math.min(totalTok * 2, 16000)
+        )
+        setResult(t); setPhase('done')
+        setHistory(h => [{ id: uid(), timestamp: Date.now(), mode, model: m, inputNames: vs.map(s => s.name || 'unnamed'), inputTokens: totalTok, output: t, outputTokens: estimateTokens(t), budget }, ...h].slice(0, 200))
       } else {
-        const r = await fetch(prov.customEndpoint || 'https://api.openai.com/v1/chat/completions', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${prov.apiKey}` }, body: JSON.stringify({ model: m, messages: [{ role: 'system', content: sys }, { role: 'user', content: usr }], temperature: 0.2, max_tokens: maxT }) })
-        const d = await r.json(); if (d.error) throw new Error(d.error.message); t = d.choices?.[0]?.message?.content || ''
+        // Phase 1: Classify each skill
+        setPhase('classifying')
+        const classifyResult = await callLLM(
+          `You are a Skill Classifier. For each skill, determine its primary category.
+Categories: framework (Framework Best Practices), reasoning (Reasoning & Thinking), debugging (Debugging & Error Recovery), quality (Code Quality & Security), devops (DevOps & Deployment), design (UI & Design), workflow (Workflow & Process), other.
+Output ONLY valid JSON array: [{"name":"...","category":"..."}]. No explanation, no markdown fences.`,
+          `Classify these ${vs.length} skills:\n\n${md}`,
+          2000
+        )
+        let classifications: { name: string; category: SkillCategory }[]
+        try {
+          const cleaned = classifyResult.replace(/```json\n?/g, '').replace(/```/g, '').trim()
+          classifications = JSON.parse(cleaned)
+        } catch {
+          // Fallback: assign all to 'other'
+          classifications = vs.map(s => ({ name: s.name || 'unnamed', category: 'other' as SkillCategory }))
+        }
+
+        // Build groups
+        const groupMap = new Map<SkillCategory, { name: string; content: string }[]>()
+        classifications.forEach((c, i) => {
+          const cat = c.category || 'other'
+          if (!groupMap.has(cat)) groupMap.set(cat, [])
+          groupMap.get(cat)!.push({ name: vs[i]?.name || c.name || 'unnamed', content: vs[i]?.content || '' })
+        })
+
+        const groups: FusionGroup[] = Array.from(groupMap.entries()).map(([cat, items]) => ({
+          category: cat, label: CATEGORIES[cat]?.label || 'Other', canMerge: CATEGORIES[cat]?.canMerge && items.length > 1, items
+        }))
+        setFusionGroups(groups); setPhase('merging')
+
+        // Phase 2: Merge groups that can be merged
+        const maxT = Math.min(budget * 2, 16000)
+        for (let gi = 0; gi < groups.length; gi++) {
+          const g = groups[gi]
+          if (g.canMerge) {
+            setFusionGroups(prev => prev.map((fg, idx) => idx === gi ? { ...fg, loading: true } : fg))
+            const itemMd = g.items.map((it, i) => `<skill_${i + 1} name="${it.name}">\n${it.content}\n</skill_${i + 1}>`).join('\n\n')
+            const catPrompt = CATEGORIES[g.category]?.mergePrompt || ''
+            try {
+              const merged = await callLLM(
+                `${catPrompt}\n\nTarget output: <=${Math.floor(budget / groups.filter(gg => gg.canMerge).length)} tokens. Keep safety/error/numbered procedures verbatim. Markdown only.`,
+                `Merge these ${g.items.length} ${g.category} skills:\n\n${itemMd}`,
+                maxT
+              )
+              groups[gi] = { ...g, result: merged, loading: false }
+              setFusionGroups(prev => prev.map((fg, idx) => idx === gi ? { ...fg, result: merged, loading: false } : fg))
+            } catch (e: any) {
+              groups[gi] = { ...g, result: `Error: ${e.message}`, loading: false }
+              setFusionGroups(prev => prev.map((fg, idx) => idx === gi ? { ...fg, result: `Error: ${e.message}`, loading: false } : fg))
+            }
+          }
+        }
+
+        // Build combined result for history
+        const allResults = groups.map(g => {
+          const header = `--- ${g.label} (${g.canMerge ? 'Merged' : 'Kept Separate'}) ---`
+          if (g.canMerge && g.result) return `${header}\n${g.result}`
+          return `${header}\n${g.items.map(it => `\n## ${it.name}\n${it.content}`).join('\n')}`
+        }).join('\n\n')
+        setResult(allResults); setPhase('done')
+        setHistory(h => [{ id: uid(), timestamp: Date.now(), mode, model: m, inputNames: vs.map(s => s.name || 'unnamed'), inputTokens: totalTok, output: allResults, outputTokens: estimateTokens(allResults), budget }, ...h].slice(0, 200))
       }
-      setResult(t)
-      setHistory(h => [{ id: uid(), timestamp: Date.now(), mode, model: m, inputNames: skills.filter(s => s.content.trim()).map(s => s.name || 'unnamed'), inputTokens: totalTok, output: t, outputTokens: estimateTokens(t), budget }, ...h].slice(0, 200))
     } catch (e: any) { setError(e.message || 'Error') } finally { setLoading(false) }
-  }, [prov, model, skills, budget, mode, totalTok])
+  }, [prov, model, skills, budget, mode, totalTok, callLLM])
 
   /* ─── Data Management ─── */
   const exportData = () => {
@@ -313,26 +404,68 @@ Keep safety/error/numbered procedures verbatim. Drop motivation, merge variants,
             <div className="px-4 py-2.5 border-b border-[#e8e0d0] flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                <span className="text-xs font-medium text-gray-600">{mode === 'analysis' ? 'Analysis Report' : 'Fusion Result'}</span>
+                <span className="text-xs font-medium text-gray-600">{mode === 'analysis' ? 'Analysis Report' : phase === 'classifying' ? 'Classifying...' : phase === 'merging' ? 'Merging by Type...' : 'Fusion Result'}</span>
+                {fusionGroups.length > 0 && <span className="text-[10px] text-gray-400">{fusionGroups.length} groups</span>}
               </div>
               {result && (
                 <div className="flex gap-1.5">
-                  <button onClick={() => { setFavName(''); setModal('favorites') /* will need to handle save separately */ }} className="px-2 py-0.5 rounded text-[10px] text-amber-600 hover:bg-amber-50 transition border border-transparent hover:border-amber-200">Save</button>
+                  <button onClick={() => { setFavName(''); setModal('favorites') }} className="px-2 py-0.5 rounded text-[10px] text-amber-600 hover:bg-amber-50 transition border border-transparent hover:border-amber-200">Save</button>
                   <button onClick={() => navigator.clipboard.writeText(result)} className="px-2 py-0.5 rounded text-[10px] text-gray-500 hover:bg-gray-50 transition border border-transparent hover:border-[#e0d8c8]">Copy</button>
                   <button onClick={() => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([result], { type: 'text/markdown' })); a.download = 'fused-skill.md'; a.click() }} className="px-2 py-0.5 rounded text-[10px] text-gray-500 hover:bg-gray-50 transition border border-transparent hover:border-[#e0d8c8]">Download</button>
                 </div>
               )}
             </div>
-            <div className="flex-1 p-4 min-h-[400px] max-h-[400px] overflow-y-auto">
+            <div className="flex-1 p-4 min-h-[400px] max-h-[500px] overflow-y-auto">
               {error && <div className="p-2.5 rounded-lg bg-red-50 border border-red-200 text-red-600 text-xs mb-2">{error}</div>}
-              {result ? (
-                <pre className="whitespace-pre-wrap text-xs font-mono text-gray-700 leading-relaxed">{result}</pre>
-              ) : loading ? (
+              {/* Analysis mode: single result */}
+              {mode === 'analysis' && result && <pre className="whitespace-pre-wrap text-xs font-mono text-gray-700 leading-relaxed">{result}</pre>}
+              {/* Fusion mode: grouped results */}
+              {mode === 'fusion' && fusionGroups.length > 0 && (
+                <div className="space-y-3">
+                  {fusionGroups.map((g, gi) => (
+                    <details key={gi} open className="rounded-lg border border-[#e8e0d0] overflow-hidden">
+                      <summary className="px-3 py-2 bg-[#faf6ee] cursor-pointer hover:bg-[#f5f0e8] flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-medium ${g.canMerge ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-500'}`}>{g.canMerge ? 'Merged' : 'Kept Separate'}</span>
+                          <span className="text-xs font-medium text-gray-700">{g.label}</span>
+                          <span className="text-[10px] text-gray-400">{g.items.length} skill{g.items.length > 1 ? 's' : ''}</span>
+                        </div>
+                        {g.loading && <div className="w-3.5 h-3.5 rounded-full border-2 border-amber-200 border-t-amber-500 animate-spin" />}
+                      </summary>
+                      <div className="p-3">
+                        {/* Skills in this group */}
+                        <div className="flex flex-wrap gap-1 mb-2">
+                          {g.items.map((it, ii) => (
+                            <span key={ii} className="text-[9px] px-2 py-0.5 rounded-full bg-white border border-[#e0d8c8] text-gray-500">{it.name}</span>
+                          ))}
+                        </div>
+                        {/* Merged result or original content */}
+                        {g.canMerge && g.result ? (
+                          <pre className="whitespace-pre-wrap text-xs font-mono text-gray-700 leading-relaxed">{g.result}</pre>
+                        ) : (
+                          <div className="space-y-3">
+                            {g.items.map((it, ii) => (
+                              <div key={ii}>
+                                <div className="text-[10px] font-semibold text-gray-500 mb-1">{it.name}</div>
+                                <pre className="whitespace-pre-wrap text-xs font-mono text-gray-700 leading-relaxed">{it.content}</pre>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </details>
+                  ))}
+                </div>
+              )}
+              {/* Loading states */}
+              {loading && fusionGroups.length === 0 && !result && (
                 <div className="flex flex-col items-center justify-center h-full gap-3">
                   <div className="w-10 h-10 rounded-full border-2 border-amber-200 border-t-amber-500 animate-spin" />
-                  <p className="text-xs text-gray-400">{mode === 'analysis' ? 'Analyzing content...' : 'Merging and compressing...'}</p>
+                  <p className="text-xs text-gray-400">{phase === 'classifying' ? 'Classifying skills by type...' : 'Processing...'}</p>
                 </div>
-              ) : (
+              )}
+              {/* Empty state */}
+              {!result && fusionGroups.length === 0 && !loading && (
                 <div className="flex flex-col items-center justify-center h-full gap-2 text-gray-400">
                   <svg className="w-10 h-10 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                   <p className="text-xs">Results will appear here</p>
@@ -348,9 +481,9 @@ Keep safety/error/numbered procedures verbatim. Drop motivation, merge variants,
           <div className="grid sm:grid-cols-4 gap-3">
             {[
               { n: '1', t: 'Upload Files', d: 'Paste or upload multiple SKILL.md files' },
-              { n: '2', t: 'Analyze Content', d: 'AI classifies every paragraph by importance' },
-              { n: '3', t: 'Smart Merge', d: 'Deduplicate + compress within your token budget' },
-              { n: '4', t: 'Get Results', d: 'Download or copy the optimized output' },
+              { n: '2', t: 'Classify Types', d: 'AI identifies each skill\'s category (framework, debugging, reasoning...)' },
+              { n: '3', t: 'Smart Merge', d: 'Same-type skills get merged; unique types kept separate' },
+              { n: '4', t: 'Get Results', d: 'Review merged groups and standalone skills side by side' },
             ].map(s => (
               <div key={s.n} className="rounded-lg bg-white border border-[#e0d8c8] p-3 hover:border-[#c8b898] transition group relative">
                 <div className="absolute -top-1.5 -left-1.5 w-5 h-5 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center text-[9px] font-bold text-white shadow shadow-amber-600/20">{s.n}</div>
