@@ -884,7 +884,7 @@ Output ONLY valid JSON array: [{"name":"...","category":"..."}]. No explanation,
                     </div>
                     <div className="flex items-center gap-1.5 shrink-0 ml-2">
                       <span className="text-[10px] text-gray-400 font-mono">{estimateTokens(s.content)}</span>
-                      <button onClick={() => fileRefs.current[s.id]?.click()} className="px-1.5 py-0.5 rounded text-[10px] text-gray-500 hover:text-amber-600 hover:bg-amber-50 transition">Upload</button>
+                      <button onClick={() => fileRefs.current[s.id]?.click()} className="px-2 py-0.5 rounded text-[10px] font-medium text-amber-600 bg-amber-50 border border-amber-200 hover:bg-amber-100 hover:border-amber-300 transition">Upload</button>
                       <input ref={el => { fileRefs.current[s.id] = el }} type="file" accept=".md,.markdown,.txt" className="hidden" onChange={e => upload(s.id, e.target.files)} />
                       {skills.length > 1 && <button onClick={() => setSkills(ss => ss.filter(x => x.id !== s.id))} className="px-1 py-0.5 rounded text-[10px] text-red-400 hover:text-red-500 hover:bg-red-50 transition">x</button>}
                     </div>
