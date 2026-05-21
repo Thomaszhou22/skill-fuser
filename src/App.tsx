@@ -201,7 +201,7 @@ const DEMO_MERGED: Record<string, string> = {
 export default function App() {
   /* ─── State ─── */
   const [skills, setSkills] = useState<SkillInput[]>(() => loadJSON('skills', [{ id: uid(), name: '', content: '' }]))
-  const [ratio, setRatio] = useState(() => loadJSON('ratio', 50))
+  const [ratio, setRatio] = useState(() => { const r = loadJSON('ratio', 50); return [50, 60, 70, 80, 90].includes(r) ? r : 50 })
   const [providers, setProviders] = useState<ProviderConfig[]>(() => loadJSON('providers', DEFAULT_PROVIDERS))
   const [provId, setProvId] = useState(() => loadJSON('active-provider', ''))
   const [model, setModel] = useState(() => loadJSON('active-model', ''))
