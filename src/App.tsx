@@ -10,7 +10,7 @@ interface HistoryEntry { id: string; timestamp: number; mode: 'fusion' | 'analys
 interface FusionGroup {
   category: SkillCategory; label: string; canMerge: boolean; items: { name: string; content: string }[]; result?: string; loading?: boolean
 }
-type SkillCategory = 'framework' | 'reasoning' | 'debugging' | 'quality' | 'devops' | 'design' | 'workflow' | 'other'
+type SkillCategory = 'web-frontend' | 'devops-cloud' | 'ai-llm' | 'security' | 'cli-utilities' | 'git-github' | 'data-analytics' | 'coding-agents' | 'browser-automation' | 'productivity' | 'ios-macos' | 'communication' | 'pdf-documents' | 'search-research' | 'notes-pkm' | 'speech' | 'image-video' | 'marketing' | 'self-hosted' | 'shopping-ecommerce' | 'smart-home' | 'calendar' | 'health' | 'transportation' | 'gaming' | 'media-streaming' | 'apple-apps' | 'personal-dev' | 'openclaw-tools' | 'other'
 interface FavoriteEntry { id: string; timestamp: number; name: string; content: string; tokens: number }
 
 type FuseMode = 'fusion' | 'analysis'
@@ -20,26 +20,60 @@ const uid = () => Math.random().toString(36).slice(2, 8)
 const estimateTokens = (t: string) => { const c = (t.match(/[\u4e00-\u9fff\u3040-\u30ff\uac00-\ud7af]/g) || []).length; return Math.ceil(c / 2 + (t.length - c) / 4) }
 const STORAGE_KEY = 'markdown-fuser-'
 
-/* ─── Skill Categories & Prompts ─── */
+/* ─── Skill Categories & Prompts (based on VoltAgent/awesome-openclaw-skills taxonomy) ─── */
+const GENERIC_MERGE = `You are merging multiple skills in the same category.
+Rules: 1) Extract common rules, keep the most specific version. 2) Remove duplicates. 3) Merge overlapping sections. 4) Keep unique content from each source. 5) Convert verbose prose to concise bullets.
+Output format: # Merged [Category] Skill\n## Core Rules\n## Procedures\n## Quick Reference`
+
 const CATEGORIES: Record<SkillCategory, { label: string; canMerge: boolean; mergePrompt: string }> = {
-  framework: { label: 'Framework Best Practices', canMerge: true, mergePrompt: `You are merging multiple framework/language best-practice skills.
-Rules: 1) Extract common rules and keep the most specific version. 2) Remove duplicate guidelines. 3) Merge overlapping sections (e.g. two "Error Handling" sections become one). 4) Keep version-specific rules separate under clear headings. 5) Convert verbose prose to concise bullet points.
-Output format: # Merged [Framework] Best Practices\n## Core Rules\n## Patterns & Conventions\n## Anti-Patterns to Avoid\n## Quick Reference` },
-  reasoning: { label: 'Reasoning & Thinking', canMerge: false, mergePrompt: '' },
-  debugging: { label: 'Debugging & Error Recovery', canMerge: true, mergePrompt: `You are merging debugging/error-recovery skills.
-Rules: 1) Combine troubleshooting checklists, removing duplicates. 2) Merge common causes lists. 3) Unify error handling procedures into a single canonical flow. 4) Keep unique debugging techniques from each source.
-Output format: # Merged Debugging Guide\n## Troubleshooting Flow\n## Common Causes Checklist\n## Error Handling Procedures\n## Quick Reference` },
-  quality: { label: 'Code Quality & Security', canMerge: true, mergePrompt: `You are merging code quality and security skills.
-Rules: 1) Combine rule lists, removing duplicates. 2) Merge security checklists. 3) Unify naming/style conventions into one set. 4) Keep unique rules from each source.
-Output format: # Merged Code Quality & Security Rules\n## Mandatory Rules\n## Security Checklist\n## Style Conventions\n## Quick Reference` },
-  devops: { label: 'DevOps & Deployment', canMerge: true, mergePrompt: `You are merging DevOps/deployment skills.
-Rules: 1) Merge deployment steps into a unified flow. 2) Combine command references. 3) Unify environment configurations. 4) Keep platform-specific sections separate.
-Output format: # Merged DevOps Guide\n## Deployment Flow\n## Command Reference\n## Environment Config\n## Platform-Specific Notes` },
-  design: { label: 'UI & Design', canMerge: true, mergePrompt: `You are merging UI/design skills.
-Rules: 1) Merge design principles into a unified set. 2) Combine component patterns. 3) Unify style guidelines. 4) Keep unique design tokens from each source.
-Output format: # Merged Design Guidelines\n## Design Principles\n## Component Patterns\n## Style Guide\n## Quick Reference` },
-  workflow: { label: 'Workflow & Process', canMerge: false, mergePrompt: '' },
-  other: { label: 'Other', canMerge: false, mergePrompt: '' },
+  'web-frontend': { label: 'Web & Frontend Development', canMerge: true, mergePrompt: `You are merging frontend/web development skills.
+Rules: 1) Unify component patterns (prefer the more robust version). 2) Merge performance guidelines, remove duplicates. 3) Combine CSS/styling conventions into one set. 4) Keep framework-specific rules under clear headings. 5) Merge accessibility rules into a single checklist.
+Output: # Merged Web Development Guide\n## Component Patterns\n## Performance Rules\n## Styling Conventions\n## Accessibility Checklist\n## Quick Reference` },
+  'devops-cloud': { label: 'DevOps & Cloud', canMerge: true, mergePrompt: `You are merging DevOps/cloud deployment skills.
+Rules: 1) Merge deployment steps into a unified flow. 2) Combine CI/CD configurations. 3) Unify environment variable handling. 4) Keep platform-specific sections separate under headings.
+Output: # Merged DevOps Guide\n## Deployment Flow\n## CI/CD Configuration\n## Environment Config\n## Platform-Specific Notes` },
+  'ai-llm': { label: 'AI & LLMs', canMerge: true, mergePrompt: `You are merging AI/LLM-related skills.
+Rules: 1) Merge prompt engineering guidelines. 2) Combine model selection strategies. 3) Unify API usage patterns. 4) Keep provider-specific notes separate.
+Output: # Merged AI/LLM Guide\n## Prompt Engineering\n## Model Selection\n## API Patterns\n## Provider Notes` },
+  'security': { label: 'Security & Passwords', canMerge: true, mergePrompt: `You are merging security skills.
+Rules: 1) Combine security checklists, remove duplicates. 2) Merge threat models. 3) Unify authentication/authorization rules. 4) NEVER remove any security rule — when in doubt, keep both.
+Output: # Merged Security Guide\n## Mandatory Security Rules\n## Threat Checklist\n## Auth Procedures\n## Quick Reference` },
+  'cli-utilities': { label: 'CLI Utilities', canMerge: true, mergePrompt: `You are merging CLI utility skills.
+Rules: 1) Merge command references into one table. 2) Combine workflow steps. 3) Unify flag/option conventions. 4) Keep tool-specific sections separate.
+Output: # Merged CLI Guide\n## Commands Reference\n## Workflows\n## Configuration\n## Quick Reference` },
+  'git-github': { label: 'Git & GitHub', canMerge: true, mergePrompt: `You are merging Git/GitHub skills.
+Rules: 1) Merge branching strategies into one. 2) Combine PR/review workflows. 3) Unify commit conventions. 4) Merge CI integration rules.
+Output: # Merged Git/GitHub Guide\n## Branching Strategy\n## PR & Review Flow\n## Commit Conventions\n## CI Integration` },
+  'data-analytics': { label: 'Data & Analytics', canMerge: true, mergePrompt: `You are merging data/analytics skills.
+Rules: 1) Merge data processing pipelines. 2) Combine query patterns. 3) Unify visualization guidelines. 4) Keep tool-specific sections separate.
+Output: # Merged Data Analytics Guide\n## Processing Pipeline\n## Query Patterns\n## Visualization Rules\n## Quick Reference` },
+  'coding-agents': { label: 'Coding Agents & IDEs', canMerge: true, mergePrompt: `You are merging coding agent/IDE skills.
+Rules: 1) Merge agent configuration guidelines. 2) Combine extension/plugin setups. 3) Unify workflow integrations. 4) Keep agent-specific config separate.
+Output: # Merged Coding Agent Guide\n## Configuration\n## Extensions & Plugins\n## Workflow Integration\n## Quick Reference` },
+  'browser-automation': { label: 'Browser & Automation', canMerge: true, mergePrompt: `You are merging browser automation skills.
+Rules: 1) Merge automation workflows. 2) Combine selector strategies. 3) Unify error handling for web interactions. 4) Keep tool-specific API references separate.
+Output: # Merged Browser Automation Guide\n## Automation Workflows\n## Selector Strategies\n## Error Handling\n## Quick Reference` },
+  'productivity': { label: 'Productivity & Tasks', canMerge: true, mergePrompt: GENERIC_MERGE },
+  'ios-macos': { label: 'iOS & macOS Development', canMerge: true, mergePrompt: GENERIC_MERGE },
+  'communication': { label: 'Communication', canMerge: true, mergePrompt: GENERIC_MERGE },
+  'pdf-documents': { label: 'PDF & Documents', canMerge: true, mergePrompt: GENERIC_MERGE },
+  'search-research': { label: 'Search & Research', canMerge: true, mergePrompt: GENERIC_MERGE },
+  'notes-pkm': { label: 'Notes & PKM', canMerge: true, mergePrompt: GENERIC_MERGE },
+  'speech': { label: 'Speech & Transcription', canMerge: true, mergePrompt: GENERIC_MERGE },
+  'image-video': { label: 'Image & Video Generation', canMerge: true, mergePrompt: GENERIC_MERGE },
+  'marketing': { label: 'Marketing & Sales', canMerge: true, mergePrompt: GENERIC_MERGE },
+  'self-hosted': { label: 'Self-Hosted & Automation', canMerge: true, mergePrompt: GENERIC_MERGE },
+  'shopping-ecommerce': { label: 'Shopping & E-Commerce', canMerge: true, mergePrompt: GENERIC_MERGE },
+  'smart-home': { label: 'Smart Home & IoT', canMerge: true, mergePrompt: GENERIC_MERGE },
+  'calendar': { label: 'Calendar & Scheduling', canMerge: true, mergePrompt: GENERIC_MERGE },
+  'health': { label: 'Health & Fitness', canMerge: true, mergePrompt: GENERIC_MERGE },
+  'transportation': { label: 'Transportation', canMerge: true, mergePrompt: GENERIC_MERGE },
+  'gaming': { label: 'Gaming', canMerge: true, mergePrompt: GENERIC_MERGE },
+  'media-streaming': { label: 'Media & Streaming', canMerge: true, mergePrompt: GENERIC_MERGE },
+  'apple-apps': { label: 'Apple Apps & Services', canMerge: true, mergePrompt: GENERIC_MERGE },
+  'personal-dev': { label: 'Personal Development', canMerge: true, mergePrompt: GENERIC_MERGE },
+  'openclaw-tools': { label: 'OpenClaw Tools', canMerge: false, mergePrompt: '' },
+  'other': { label: 'Other', canMerge: false, mergePrompt: '' },
 }
 
 /* ─── Default Providers ─── */
@@ -173,7 +207,7 @@ ${s.content}
         setPhase('classifying')
         const classifyResult = await callLLM(
           `You are a Skill Classifier. For each skill, determine its primary category.
-Categories: framework (Framework Best Practices), reasoning (Reasoning & Thinking), debugging (Debugging & Error Recovery), quality (Code Quality & Security), devops (DevOps & Deployment), design (UI & Design), workflow (Workflow & Process), other.
+Categories: web-frontend (Web & Frontend Development), devops-cloud (DevOps & Cloud), ai-llm (AI & LLMs), security (Security & Passwords), cli-utilities (CLI Utilities), git-github (Git & GitHub), data-analytics (Data & Analytics), coding-agents (Coding Agents & IDEs), browser-automation (Browser & Automation), productivity (Productivity & Tasks), ios-macos (iOS & macOS Development), communication (Communication), pdf-documents (PDF & Documents), search-research (Search & Research), notes-pkm (Notes & PKM), speech (Speech & Transcription), image-video (Image & Video Generation), marketing (Marketing & Sales), self-hosted (Self-Hosted & Automation), shopping-ecommerce (Shopping & E-Commerce), smart-home (Smart Home & IoT), calendar (Calendar & Scheduling), health (Health & Fitness), transportation (Transportation), gaming (Gaming), media-streaming (Media & Streaming), apple-apps (Apple Apps & Services), personal-dev (Personal Development), openclaw-tools (OpenClaw Tools), other.
 Output ONLY valid JSON array: [{"name":"...","category":"..."}]. No explanation, no markdown fences.`,
           `Classify these ${vs.length} skills. Return EXACTLY ${vs.length} items in JSON array, same order as input:\n\n${md}`,
           2000
