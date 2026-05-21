@@ -809,8 +809,8 @@ Output ONLY valid JSON array: [{"name":"...","category":"..."}]. No explanation,
           <div className="flex rounded-lg overflow-hidden bg-white border border-[#e0d8c8] p-0.5">
             <button onClick={() => setMode('fusion')} className={`px-4 py-1.5 rounded-md text-xs font-medium transition-all ${mode === 'fusion' ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow shadow-amber-600/20' : 'text-gray-500 hover:text-gray-700'}`}>Fusion</button>
             <button onClick={() => setMode('analysis')} className={`px-4 py-1.5 rounded-md text-xs font-medium transition-all ${mode === 'analysis' ? 'bg-gradient-to-r from-amber-600 to-orange-500 text-white shadow shadow-orange-500/20' : 'text-gray-500 hover:text-gray-700'}`}>Analysis</button>
-            {mode === 'analysis' && <button onClick={() => { setSkills([{ id: uid(), name: '', content: '' }]); setResult(''); setFusionGroups([]); setPhase('idle'); setError(''); setRatio(50) }} className="px-3 py-1.5 rounded-lg text-[11px] font-medium bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow shadow-amber-500/20 hover:from-amber-400 hover:to-amber-500 transition">Clear</button>}
           </div>
+            {mode === 'analysis' && <button onClick={() => { setSkills([{ id: uid(), name: '', content: '' }]); setResult(''); setFusionGroups([]); setPhase('idle'); setError(''); setRatio(50) }} className="px-3 py-1.5 rounded-lg text-[11px] font-medium bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow shadow-amber-500/20 hover:from-amber-400 hover:to-amber-500 transition">Clear</button>}
           {mode === 'fusion' && (<>
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white border border-[#e0d8c8]">
               <span className="text-[11px] text-gray-500 relative group cursor-help">
