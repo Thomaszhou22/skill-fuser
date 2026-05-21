@@ -129,26 +129,26 @@ Output: # Title > description\n## Mandatory Rules\n## Workflows\n## Quick Refere
   }, [prov, model, skills, budget, mode, totalTok])
 
   return (
-    <div className="min-h-screen bg-[#07070a] text-gray-100">
+    <div className="min-h-screen bg-[#f5f0e8] text-gray-900">
       {/* ═══ NAV ═══ */}
-      <nav className="sticky top-0 z-40 bg-[#07070a]/80 backdrop-blur-xl border-b border-white/[0.06]">
+      <nav className="sticky top-0 z-40 bg-[#f5f0e8]/80 backdrop-blur-xl border-b border-[#e0d8c8]">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500 via-violet-500 to-purple-600 flex items-center justify-center text-sm shadow-lg shadow-violet-500/20">🔀</div>
             <div>
               <span className="font-bold text-sm">Markdown Fuser</span>
-              <span className="hidden sm:inline text-gray-600 text-xs ml-2">Skill 文件合并压缩工具</span>
+              <span className="hidden sm:inline text-gray-400 text-xs ml-2">Skill 文件合并压缩工具</span>
             </div>
           </div>
           <div className="flex items-center gap-3">
             {prov && (
-              <div className="hidden sm:flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.06]">
+              <div className="hidden sm:flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-white/90 border border-[#e0d8c8]">
                 <span>{prov.icon}</span>
                 <span className="text-gray-400">{model || prov.defaultModel}</span>
                 <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
               </div>
             )}
-            <button onClick={() => setShowSettings(true)} className={`text-xs px-4 py-2 rounded-full font-medium transition-all ${prov?.apiKey ? 'bg-white/[0.06] hover:bg-white/[0.1] text-gray-400 border border-white/[0.08]' : 'bg-gradient-to-r from-blue-600 to-violet-600 text-white shadow-lg shadow-violet-500/20 hover:shadow-violet-500/30'}`}>
+            <button onClick={() => setShowSettings(true)} className={`text-xs px-4 py-2 rounded-full font-medium transition-all ${prov?.apiKey ? 'bg-white/[0.06] hover:bg-white/[0.1] text-gray-400 border border-[#e0d8c8]' : 'bg-gradient-to-r from-blue-600 to-violet-600 text-white shadow-lg shadow-violet-500/20 hover:shadow-violet-500/30'}`}>
               {prov?.apiKey ? '⚙️ 模型设置' : '🚀 开始配置'}
             </button>
           </div>
@@ -160,7 +160,7 @@ Output: # Title > description\n## Mandatory Rules\n## Workflows\n## Quick Refere
         <div className="absolute inset-0 bg-gradient-to-b from-blue-600/[0.07] via-violet-600/[0.05] to-transparent pointer-events-none" />
         <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-gradient-to-r from-blue-500/10 to-violet-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="relative max-w-6xl mx-auto px-6 pt-16 pb-12 text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08] text-xs text-gray-400 mb-6">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/90 border border-[#e0d8c8] text-xs text-gray-400 mb-6">
             <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
             基于 SkillReducer 研究 · arXiv 2603.29919
           </div>
@@ -170,24 +170,24 @@ Output: # Title > description\n## Mandatory Rules\n## Workflows\n## Quick Refere
           </h1>
           <p className="text-gray-500 text-sm max-w-xl mx-auto leading-relaxed mb-8">
             粘贴多个 SKILL.md，设置 Token 预算，一键智能合并去重压缩。<br />
-            <span className="text-gray-600">研究证明只保留 38.5% 核心规则，Agent 表现反而提升 2.8%。</span>
+            <span className="text-gray-400">研究证明只保留 38.5% 核心规则，Agent 表现反而提升 2.8%。</span>
           </p>
           <div className="flex flex-wrap justify-center gap-3">
-            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.04] border border-white/[0.06]">
+            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/90 border border-[#e0d8c8]">
               <span className="text-lg">📚</span>
-              <div className="text-left"><div className="text-xs font-medium">多文件合并</div><div className="text-[10px] text-gray-600">智能去重</div></div>
+              <div className="text-left"><div className="text-xs font-medium">多文件合并</div><div className="text-[10px] text-gray-400">智能去重</div></div>
             </div>
-            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.04] border border-white/[0.06]">
+            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/90 border border-[#e0d8c8]">
               <span className="text-lg">🎯</span>
-              <div className="text-left"><div className="text-xs font-medium">Token 预算</div><div className="text-[10px] text-gray-600">精确控制</div></div>
+              <div className="text-left"><div className="text-xs font-medium">Token 预算</div><div className="text-[10px] text-gray-400">精确控制</div></div>
             </div>
-            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.04] border border-white/[0.06]">
+            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/90 border border-[#e0d8c8]">
               <span className="text-lg">🧠</span>
-              <div className="text-left"><div className="text-xs font-medium">智能压缩</div><div className="text-[10px] text-gray-600">论文驱动</div></div>
+              <div className="text-left"><div className="text-xs font-medium">智能压缩</div><div className="text-[10px] text-gray-400">论文驱动</div></div>
             </div>
-            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.04] border border-white/[0.06]">
+            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/90 border border-[#e0d8c8]">
               <span className="text-lg">🔒</span>
-              <div className="text-left"><div className="text-xs font-medium">隐私安全</div><div className="text-[10px] text-gray-600">浏览器本地</div></div>
+              <div className="text-left"><div className="text-xs font-medium">隐私安全</div><div className="text-[10px] text-gray-400">浏览器本地</div></div>
             </div>
           </div>
         </div>
@@ -197,20 +197,20 @@ Output: # Title > description\n## Mandatory Rules\n## Workflows\n## Quick Refere
       <section className="max-w-6xl mx-auto px-6 pb-20">
         {/* Controls */}
         <div className="flex flex-wrap items-center gap-3 mb-4">
-          <div className="flex rounded-xl overflow-hidden bg-white/[0.04] border border-white/[0.08] p-0.5">
-            <button onClick={() => setMode('fusion')} className={`px-4 py-2 rounded-lg text-xs font-medium transition-all ${mode === 'fusion' ? 'bg-gradient-to-r from-blue-600 to-violet-600 text-white shadow-lg shadow-violet-500/20' : 'text-gray-500 hover:text-gray-300'}`}>🔀 合并压缩</button>
-            <button onClick={() => setMode('analysis')} className={`px-4 py-2 rounded-lg text-xs font-medium transition-all ${mode === 'analysis' ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-lg shadow-orange-500/20' : 'text-gray-500 hover:text-gray-300'}`}>🔬 内容分析</button>
+          <div className="flex rounded-xl overflow-hidden bg-white/90 border border-[#e0d8c8] p-0.5">
+            <button onClick={() => setMode('fusion')} className={`px-4 py-2 rounded-lg text-xs font-medium transition-all ${mode === 'fusion' ? 'bg-gradient-to-r from-blue-600 to-violet-600 text-white shadow-lg shadow-violet-500/20' : 'text-gray-500 hover:text-gray-700'}`}>🔀 合并压缩</button>
+            <button onClick={() => setMode('analysis')} className={`px-4 py-2 rounded-lg text-xs font-medium transition-all ${mode === 'analysis' ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-lg shadow-orange-500/20' : 'text-gray-500 hover:text-gray-700'}`}>🔬 内容分析</button>
           </div>
           {mode === 'fusion' && (
-            <div className="flex items-center gap-3 px-4 py-2 rounded-xl bg-white/[0.04] border border-white/[0.06]">
+            <div className="flex items-center gap-3 px-4 py-2 rounded-xl bg-white/90 border border-[#e0d8c8]">
               <span className="text-xs text-gray-500">Token 预算</span>
               <input type="range" min={200} max={20000} step={100} value={budget} onChange={e => setBudget(+e.target.value)} className="w-24 accent-violet-500" />
-              <input type="number" value={budget} onChange={e => setBudget(+e.target.value)} className="w-20 bg-white/[0.06] border border-white/[0.08] rounded-lg px-2 py-1 text-xs text-center focus:outline-none focus:border-violet-500/50 font-mono" />
+              <input type="number" value={budget} onChange={e => setBudget(+e.target.value)} className="w-20 bg-white/[0.06] border border-[#e0d8c8] rounded-lg px-2 py-1 text-xs text-center focus:outline-none focus:border-violet-500/50 font-mono" />
               <div className="hidden sm:flex items-center gap-1.5 text-[10px] font-mono">
-                <span className="text-gray-600">{totalTok}</span>
-                <span className="text-gray-700">→</span>
+                <span className="text-gray-400">{totalTok}</span>
+                <span className="text-gray-500">→</span>
                 <span className="text-violet-400">{budget}</span>
-                <span className="text-gray-700">tok</span>
+                <span className="text-gray-500">tok</span>
               </div>
             </div>
           )}
@@ -225,12 +225,12 @@ Output: # Title > description\n## Mandatory Rules\n## Workflows\n## Quick Refere
         {/* Two Columns */}
         <div className="grid lg:grid-cols-2 gap-5">
           {/* INPUT */}
-          <div className="rounded-2xl bg-white/[0.03] border border-white/[0.06] overflow-hidden shadow-2xl shadow-black/20">
-            <div className="px-5 py-3 border-b border-white/[0.06] flex items-center justify-between">
+          <div className="rounded-2xl bg-white border border-[#e0d8c8] overflow-hidden shadow-2xl shadow-black/20">
+            <div className="px-5 py-3 border-b border-[#e0d8c8] flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-blue-500" />
                 <span className="text-xs font-medium text-gray-400">Skill 输入</span>
-                <span className="text-[10px] text-gray-700 font-mono">{totalTok} tokens</span>
+                <span className="text-[10px] text-gray-500 font-mono">{totalTok} tokens</span>
               </div>
               <button onClick={() => setSkills([...skills, { id: uid(), name: '', content: '' }])} className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1">
                 <span>+</span> 添加文件
@@ -238,15 +238,15 @@ Output: # Title > description\n## Mandatory Rules\n## Workflows\n## Quick Refere
             </div>
             <div className="p-4 space-y-3 max-h-[420px] overflow-y-auto">
               {skills.map((s, i) => (
-                <div key={s.id} className="rounded-xl bg-white/[0.02] border border-white/[0.05] overflow-hidden hover:border-white/[0.1] transition">
-                  <div className="flex items-center justify-between px-3 py-2 border-b border-white/[0.04]">
+                <div key={s.id} className="rounded-xl bg-white border border-[#e0d8c8] overflow-hidden hover:border-[#c8b898] transition">
+                  <div className="flex items-center justify-between px-3 py-2 border-b border-[#e8e0d0]">
                     <div className="flex items-center gap-2 flex-1 min-w-0">
-                      <span className="text-[10px] text-gray-700 font-mono w-4">{i + 1}</span>
+                      <span className="text-[10px] text-gray-500 font-mono w-4">{i + 1}</span>
                       <input value={s.name} onChange={e => setSkills(ss => ss.map(x => x.id === s.id ? { ...x, name: e.target.value } : x))} placeholder={`Skill ${i + 1}`} className="bg-transparent text-xs w-full focus:outline-none placeholder-gray-700" />
                     </div>
                     <div className="flex items-center gap-2 shrink-0 ml-2">
-                      <span className="text-[10px] text-gray-700 font-mono">{estimateTokens(s.content)} tok</span>
-                      <button onClick={() => fileRefs.current[s.id]?.click()} className="px-2 py-0.5 rounded-md bg-white/[0.04] text-[10px] text-gray-500 hover:text-gray-300 hover:bg-white/[0.08] transition">📎 上传</button>
+                      <span className="text-[10px] text-gray-500 font-mono">{estimateTokens(s.content)} tok</span>
+                      <button onClick={() => fileRefs.current[s.id]?.click()} className="px-2 py-0.5 rounded-md bg-white/90 text-[10px] text-gray-500 hover:text-gray-700 hover:bg-white/[0.08] transition">📎 上传</button>
                       <input ref={el => { fileRefs.current[s.id] = el }} type="file" accept=".md,.markdown,.txt" className="hidden" onChange={e => upload(s.id, e.target.files)} />
                       {skills.length > 1 && <button onClick={() => setSkills(ss => ss.filter(x => x.id !== s.id))} className="px-1.5 py-0.5 rounded-md text-[10px] text-red-500/40 hover:text-red-400 hover:bg-red-500/10 transition">✕</button>}
                     </div>
@@ -255,7 +255,7 @@ Output: # Title > description\n## Mandatory Rules\n## Workflows\n## Quick Refere
                 </div>
               ))}
             </div>
-            <div className="px-5 py-4 border-t border-white/[0.06]">
+            <div className="px-5 py-4 border-t border-[#e0d8c8]">
               <button onClick={fuse} disabled={loading || !prov?.apiKey} className={`w-full py-2.5 rounded-xl text-xs font-semibold transition-all disabled:opacity-30 disabled:cursor-not-allowed ${
                 mode === 'analysis'
                   ? 'bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white shadow-lg shadow-orange-500/20'
@@ -268,28 +268,28 @@ Output: # Title > description\n## Mandatory Rules\n## Workflows\n## Quick Refere
                   </span>
                 ) : mode === 'analysis' ? '🔬 分析内容构成' : '🔀 开始合并压缩'}
               </button>
-              {!prov?.apiKey && !loading && <p className="text-[10px] text-center text-gray-600 mt-2">请先点击右上角「🚀 开始配置」设置 API Key</p>}
+              {!prov?.apiKey && !loading && <p className="text-[10px] text-center text-gray-400 mt-2">请先点击右上角「🚀 开始配置」设置 API Key</p>}
             </div>
           </div>
 
           {/* OUTPUT */}
-          <div className="rounded-2xl bg-white/[0.03] border border-white/[0.06] overflow-hidden shadow-2xl shadow-black/20 flex flex-col">
-            <div className="px-5 py-3 border-b border-white/[0.06] flex items-center justify-between">
+          <div className="rounded-2xl bg-white border border-[#e0d8c8] overflow-hidden shadow-2xl shadow-black/20 flex flex-col">
+            <div className="px-5 py-3 border-b border-[#e0d8c8] flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-violet-500" />
                 <span className="text-xs font-medium text-gray-400">{mode === 'analysis' ? '分析报告' : '合并结果'}</span>
               </div>
               {result && (
                 <div className="flex gap-2">
-                  <button onClick={() => navigator.clipboard.writeText(result)} className="px-2.5 py-1 rounded-lg bg-white/[0.04] text-[10px] text-gray-500 hover:text-gray-300 hover:bg-white/[0.08] transition">📋 复制</button>
-                  <button onClick={() => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([result], { type: 'text/markdown' })); a.download = 'fused-skill.md'; a.click() }} className="px-2.5 py-1 rounded-lg bg-white/[0.04] text-[10px] text-gray-500 hover:text-gray-300 hover:bg-white/[0.08] transition">💾 下载</button>
+                  <button onClick={() => navigator.clipboard.writeText(result)} className="px-2.5 py-1 rounded-lg bg-white/90 text-[10px] text-gray-500 hover:text-gray-700 hover:bg-white/[0.08] transition">📋 复制</button>
+                  <button onClick={() => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([result], { type: 'text/markdown' })); a.download = 'fused-skill.md'; a.click() }} className="px-2.5 py-1 rounded-lg bg-white/90 text-[10px] text-gray-500 hover:text-gray-700 hover:bg-white/[0.08] transition">💾 下载</button>
                 </div>
               )}
             </div>
             <div className="flex-1 p-5 min-h-[420px] max-h-[420px] overflow-y-auto">
               {error && <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-300 text-xs mb-3">⚠️ {error}</div>}
               {result ? (
-                <pre className="whitespace-pre-wrap text-xs font-mono text-gray-300 leading-relaxed">{result}</pre>
+                <pre className="whitespace-pre-wrap text-xs font-mono text-gray-700 leading-relaxed">{result}</pre>
               ) : loading ? (
                 <div className="flex flex-col items-center justify-center h-full gap-3">
                   <div className="relative">
@@ -298,10 +298,10 @@ Output: # Title > description\n## Mandatory Rules\n## Workflows\n## Quick Refere
                   <p className="text-xs text-gray-500">{mode === 'analysis' ? '正在分析内容...' : '正在合并压缩...'}</p>
                 </div>
               ) : (
-                <div className="flex flex-col items-center justify-center h-full gap-3 text-gray-700">
+                <div className="flex flex-col items-center justify-center h-full gap-3 text-gray-500">
                   <span className="text-4xl opacity-20">🔀</span>
                   <p className="text-xs">{mode === 'analysis' ? '内容分析报告将显示在这里' : '合并结果将显示在这里'}</p>
-                  <p className="text-[10px] text-gray-800 max-w-xs text-center">
+                  <p className="text-[10px] text-gray-400 max-w-xs text-center">
                     {mode === 'analysis' ? '将内容分为 Core Rule / Background / Example / Template / Redundant' : '分类 → 去重 → 压缩 → Progressive Disclosure 输出'}
                   </p>
                 </div>
@@ -320,11 +320,11 @@ Output: # Title > description\n## Mandatory Rules\n## Workflows\n## Quick Refere
               { step: '3', icon: '🔀', title: '智能合并', desc: '去重 + 压缩到你的 Token 预算内' },
               { step: '4', icon: '✅', title: '获取结果', desc: '下载或复制压缩后的最优 Skill' },
             ].map(s => (
-              <div key={s.step} className="relative rounded-xl bg-white/[0.02] border border-white/[0.05] p-4 text-center hover:bg-white/[0.04] hover:border-white/[0.1] transition group">
+              <div key={s.step} className="relative rounded-xl bg-white border border-[#e0d8c8] p-4 text-center hover:bg-white/90 hover:border-[#c8b898] transition group">
                 <div className="absolute -top-2 -left-2 w-6 h-6 rounded-full bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center text-[10px] font-bold shadow-lg shadow-violet-500/20">{s.step}</div>
                 <div className="text-2xl mb-2 mt-1">{s.icon}</div>
                 <div className="text-xs font-medium mb-1">{s.title}</div>
-                <div className="text-[10px] text-gray-600 leading-relaxed">{s.desc}</div>
+                <div className="text-[10px] text-gray-400 leading-relaxed">{s.desc}</div>
               </div>
             ))}
           </div>
@@ -332,30 +332,30 @@ Output: # Title > description\n## Mandatory Rules\n## Workflows\n## Quick Refere
 
         {/* FOOTER */}
         <div className="mt-12 text-center">
-          <div className="inline-flex items-center gap-4 px-4 py-2 rounded-full bg-white/[0.02] border border-white/[0.05]">
-            <span className="text-[10px] text-gray-600">Inspired by <em>SkillReducer</em> (arXiv 2603.29919)</span>
-            <span className="text-gray-800">·</span>
-            <a href="https://github.com/Thomaszhou22/markdown-fuser" target="_blank" className="text-[10px] text-gray-500 hover:text-gray-300 underline">GitHub</a>
-            <span className="text-gray-800">·</span>
-            <span className="text-[10px] text-gray-600">🔒 数据仅在浏览器本地处理</span>
+          <div className="inline-flex items-center gap-4 px-4 py-2 rounded-full bg-white border border-[#e0d8c8]">
+            <span className="text-[10px] text-gray-400">Inspired by <em>SkillReducer</em> (arXiv 2603.29919)</span>
+            <span className="text-gray-400">·</span>
+            <a href="https://github.com/Thomaszhou22/markdown-fuser" target="_blank" className="text-[10px] text-gray-500 hover:text-gray-700 underline">GitHub</a>
+            <span className="text-gray-400">·</span>
+            <span className="text-[10px] text-gray-400">🔒 数据仅在浏览器本地处理</span>
           </div>
         </div>
       </section>
 
       {/* ═══ SETTINGS DIALOG ═══ */}
       {showSettings && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4" onClick={() => setShowSettings(false)}>
-          <div className="bg-[#111118] border border-white/[0.08] rounded-2xl w-full max-w-md max-h-[75vh] overflow-hidden flex flex-col shadow-2xl shadow-black/40" onClick={e => e.stopPropagation()}>
-            <div className="px-6 py-4 border-b border-white/[0.06] flex items-center justify-between">
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-md flex items-center justify-center p-4" onClick={() => setShowSettings(false)}>
+          <div className="bg-white border border-[#e0d8c8] rounded-2xl w-full max-w-md max-h-[75vh] overflow-hidden flex flex-col shadow-2xl shadow-black/40" onClick={e => e.stopPropagation()}>
+            <div className="px-6 py-4 border-b border-[#e0d8c8] flex items-center justify-between">
               <div>
                 <h3 className="text-sm font-bold">模型设置</h3>
-                <p className="text-[10px] text-gray-600 mt-0.5">选择 AI 服务商，填入你的 API Key</p>
+                <p className="text-[10px] text-gray-400 mt-0.5">选择 AI 服务商，填入你的 API Key</p>
               </div>
-              <button onClick={() => setShowSettings(false)} className="w-7 h-7 rounded-lg bg-white/[0.04] flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/[0.08] transition">×</button>
+              <button onClick={() => setShowSettings(false)} className="w-7 h-7 rounded-lg bg-white/90 flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/[0.08] transition">×</button>
             </div>
             <div className="flex-1 overflow-y-auto p-4 space-y-3">
               {providers.map(p => (
-                <div key={p.id} className={`rounded-xl border p-4 transition-all ${provId === p.id ? 'border-violet-500/30 bg-gradient-to-br ' + p.color : 'border-white/[0.05] bg-white/[0.02] hover:border-white/[0.1]'}`}>
+                <div key={p.id} className={`rounded-xl border p-4 transition-all ${provId === p.id ? 'border-violet-500/30 bg-gradient-to-br ' + p.color : 'border-[#e0d8c8] bg-white hover:border-[#c8b898]'}`}>
                   <div className="flex items-center gap-2 mb-3">
                     <span className="text-lg">{p.icon}</span>
                     <span className="text-sm font-semibold">{p.name}</span>
@@ -366,13 +366,13 @@ Output: # Title > description\n## Mandatory Rules\n## Workflows\n## Quick Refere
                     </div>
                   </div>
                   <div className="flex gap-2 mb-2">
-                    <input type="password" value={p.apiKey} onChange={e => setProv(p.id, { apiKey: e.target.value, status: 'idle' })} placeholder="输入 API Key" className="flex-1 bg-black/30 border border-white/[0.06] rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-violet-500/50 transition" />
+                    <input type="password" value={p.apiKey} onChange={e => setProv(p.id, { apiKey: e.target.value, status: 'idle' })} placeholder="输入 API Key" className="flex-1 bg-[#f5f0e8] border border-[#e0d8c8] rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-violet-500/50 transition" />
                     {p.apiKey && <button onClick={() => testConn(p.id)} className="px-3 py-2 rounded-lg bg-white/[0.06] text-xs text-gray-400 hover:bg-white/[0.1] transition whitespace-nowrap">测试连接</button>}
                   </div>
-                  {p.id === 'custom' && <input value={p.customEndpoint || ''} onChange={e => setProv(p.id, { customEndpoint: e.target.value })} placeholder="https://api.example.com/v1/chat/completions" className="w-full bg-black/30 border border-white/[0.06] rounded-lg px-3 py-2 text-xs mb-2 focus:outline-none focus:border-violet-500/50 transition" />}
+                  {p.id === 'custom' && <input value={p.customEndpoint || ''} onChange={e => setProv(p.id, { customEndpoint: e.target.value })} placeholder="https://api.example.com/v1/chat/completions" className="w-full bg-[#f5f0e8] border border-[#e0d8c8] rounded-lg px-3 py-2 text-xs mb-2 focus:outline-none focus:border-violet-500/50 transition" />}
                   {p.models.length > 0 && (
                     <div className="flex flex-wrap gap-1.5 mb-2">
-                      {p.models.map(m => <button key={m} onClick={() => { setModel(m); setProvId(p.id) }} className={`text-[10px] px-2.5 py-1 rounded-lg transition ${provId === p.id && model === m ? 'bg-violet-600 text-white shadow shadow-violet-500/20' : 'bg-white/[0.04] text-gray-500 hover:bg-white/[0.08]'}`}>{m}</button>)}
+                      {p.models.map(m => <button key={m} onClick={() => { setModel(m); setProvId(p.id) }} className={`text-[10px] px-2.5 py-1 rounded-lg transition ${provId === p.id && model === m ? 'bg-violet-600 text-white shadow shadow-violet-500/20' : 'bg-white/90 text-gray-500 hover:bg-white/[0.08]'}`}>{m}</button>)}
                     </div>
                   )}
                   {p.apiKey && (
@@ -382,7 +382,7 @@ Output: # Title > description\n## Mandatory Rules\n## Workflows\n## Quick Refere
                   )}
                 </div>
               ))}
-              <p className="text-[10px] text-gray-700 text-center pt-1">🔒 API Key 仅保存在浏览器本地，不会上传到任何服务器</p>
+              <p className="text-[10px] text-gray-500 text-center pt-1">🔒 API Key 仅保存在浏览器本地，不会上传到任何服务器</p>
             </div>
           </div>
         </div>
