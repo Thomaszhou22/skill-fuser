@@ -824,6 +824,7 @@ Output ONLY valid JSON array: [{"name":"...","category":"..."}]. No explanation,
               </span>
               <div className="flex gap-1">{[50, 60, 70, 80, 90].map(r => (<button key={r} onClick={() => setRatio(r)} className={`px-2 py-0.5 rounded text-[10px] font-medium transition ${ratio === r ? 'bg-amber-500 text-white' : 'bg-[#f5f0e8] text-gray-500 hover:bg-amber-100'}`}>{r}%</button>))}</div>
               <span className="text-[10px] text-gray-400">~{budget} tokens</span>
+              <button onClick={() => { setSkills([{ id: uid(), name: '', content: '' }]); setResult(''); setFusionGroups([]); setPhase('idle'); setError(''); setRatio(50) }} className="px-2.5 py-0.5 rounded text-[10px] font-medium text-gray-400 hover:text-gray-600 hover:bg-white border border-transparent hover:border-[#e0d8c8] transition ml-1">Clear</button>
             </div>
           )}
           {outTok > 0 && (
@@ -886,7 +887,6 @@ Output ONLY valid JSON array: [{"name":"...","category":"..."}]. No explanation,
                   <button onClick={() => { setFavName(''); setModal('favorites') }} className="px-2 py-0.5 rounded text-[10px] text-amber-600 hover:bg-amber-50 transition border border-transparent hover:border-amber-200">Save</button>
                   <button onClick={() => navigator.clipboard.writeText(result)} className="px-2 py-0.5 rounded text-[10px] text-gray-500 hover:bg-gray-50 transition border border-transparent hover:border-[#e0d8c8]">Copy</button>
                   <button onClick={() => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([result], { type: 'text/markdown' })); a.download = 'fused-skill.md'; a.click() }} className="px-2 py-0.5 rounded text-[10px] text-gray-500 hover:bg-gray-50 transition border border-transparent hover:border-[#e0d8c8]">Download</button>
-                  <button onClick={() => { setSkills([{ id: uid(), name: '', content: '' }]); setResult(''); setFusionGroups([]); setPhase('idle'); setError(''); setRatio(50) }} className="px-2.5 py-0.5 rounded text-[10px] font-medium text-white bg-amber-500 hover:bg-amber-600 transition">New</button>
                 </div>
               )}
             </div>
@@ -983,7 +983,7 @@ Output ONLY valid JSON array: [{"name":"...","category":"..."}]. No explanation,
 
       {/* ═══ MODALS ═══ */}
       {modal !== 'none' && (
-        <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setModal('none')}>
+        <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => { setModal('none'); if (!providers.find(p => p.id === provId)?.enabled) { setProvId(''); setModel('') } }}>
           <div className="bg-white border border-[#e0d8c8] rounded-xl w-full shadow-xl max-h-[80vh] overflow-hidden flex flex-col" onClick={e => e.stopPropagation()} style={{ maxWidth: modal === 'settings' ? '560px' : modal === 'data' ? '500px' : '480px' }}>
 
             {/* ═══ MODEL MANAGEMENT ═══ */}
@@ -993,7 +993,7 @@ Output ONLY valid JSON array: [{"name":"...","category":"..."}]. No explanation,
                   <h3 className="text-sm font-bold text-gray-800">Model Management</h3>
                   <p className="text-[10px] text-gray-400 mt-0.5">Configure AI providers and API keys</p>
                 </div>
-                <button onClick={() => setModal('none')} className="w-6 h-6 rounded-md hover:bg-gray-100 flex items-center justify-center text-gray-400 text-sm transition">x</button>
+                <button onClick={() => { setModal('none'); if (!providers.find(p => p.id === provId)?.enabled) { setProvId(''); setModel('') } }} className="w-6 h-6 rounded-md hover:bg-gray-100 flex items-center justify-center text-gray-400 text-sm transition">x</button>
               </div>
               <div className="flex-1 overflow-y-auto p-3 space-y-2">
                 {providers.map(p => (
