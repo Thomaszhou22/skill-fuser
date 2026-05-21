@@ -162,8 +162,8 @@ const DEMO_MERGED: Record<string, string> = {
 
 export default function App() {
   /* ─── State ─── */
-  const [skills, setSkills] = useState<SkillInput[]>([{ id: uid(), name: '', content: '' }])
-  const [budget, setBudget] = useState(2000)
+  const [skills, setSkills] = useState<SkillInput[]>(() => loadJSON('skills', [{ id: uid(), name: '', content: '' }]))
+  const [budget, setBudget] = useState(() => loadJSON('budget', 2000))
   const [providers, setProviders] = useState<ProviderConfig[]>(() => loadJSON('providers', DEFAULT_PROVIDERS))
   const [provId, setProvId] = useState(() => loadJSON('active-provider', ''))
   const [model, setModel] = useState(() => loadJSON('active-model', ''))
@@ -240,6 +240,8 @@ export default function App() {
   useEffect(() => { saveJSON('active-model', model) }, [model])
   useEffect(() => { saveJSON('history', history) }, [history])
   useEffect(() => { saveJSON('favorites', favorites) }, [favorites])
+  useEffect(() => { saveJSON('skills', skills) }, [skills])
+  useEffect(() => { saveJSON('budget', budget) }, [budget])
 
   const setProv = (id: string, u: Partial<ProviderConfig>) => setProviders(ps => ps.map(p => p.id === id ? { ...p, ...u } : p))
 
@@ -424,7 +426,9 @@ Output ONLY valid JSON array: [{"name":"...","category":"..."}]. No explanation,
     localStorage.removeItem(STORAGE_KEY + 'favorites')
     localStorage.removeItem(STORAGE_KEY + 'active-provider')
     localStorage.removeItem(STORAGE_KEY + 'active-model')
-    setProviders(DEFAULT_PROVIDERS); setHistory([]); setFavorites([]); setProvId(''); setModel(''); setResult('')
+    localStorage.removeItem(STORAGE_KEY + 'skills')
+    localStorage.removeItem(STORAGE_KEY + 'budget')
+    setProviders(DEFAULT_PROVIDERS); setHistory([]); setFavorites([]); setProvId(''); setModel(''); setResult(''); setSkills([{ id: uid(), name: '', content: '' }]); setBudget(2000)
   }
 
   /* ─── Storage Size ─── */
@@ -510,8 +514,8 @@ Output ONLY valid JSON array: [{"name":"...","category":"..."}]. No explanation,
                   <span className="absolute top-full left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-800 rotate-45 -mt-1" />
                 </span>
               </span>
-              <input type="range" min={200} max={20000} step={100} value={budget} onChange={e => setBudget(+e.target.value)} className="w-20 accent-amber-500" />
-              <input type="number" value={budget} onChange={e => setBudget(+e.target.value)} className="w-16 bg-[#f5f0e8] border border-[#e0d8c8] rounded-md px-2 py-0.5 text-[11px] text-center focus:outline-none focus:border-amber-500/50 font-mono" />
+              <input type="range" min={0} max={Math.max(totalTok, 200)} step={Math.max(1, Math.floor(totalTok / 50))} value={budget} onChange={e => setBudget(+e.target.value)} className="w-20 accent-amber-500" />
+              <input type="number" min={0} max={Math.max(totalTok, 200)} value={budget} onChange={e => setBudget(Math.min(+e.target.value, totalTok || 200))} className="w-16 bg-[#f5f0e8] border border-[#e0d8c8] rounded-md px-2 py-0.5 text-[11px] text-center focus:outline-none focus:border-amber-500/50 font-mono" />
               <span className="text-[10px] text-gray-400">tokens (from {totalTok} input)</span>
             </div>
           )}
