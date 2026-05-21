@@ -5,7 +5,7 @@
 [English](./README.md) | [中文](#中文)
 
 [![GitHub stars](https://img.shields.io/github/stars/Thomaszhou22/markdown-fuser?style=social)](https://github.com/Thomaszhou22/markdown-fuser/stargazers)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](LICENSE)
 [![Deploy with Vercel](https://img.shields.io/badge/Vercel-indigo?style=flat&logo=vercel)](https://markdown-fuser.vercel.app)
 
 [在线演示](https://markdown-fuser.vercel.app) | [GitHub](https://github.com/Thomaszhou22/markdown-fuser) | [研究背景](#研究背景)
@@ -119,17 +119,17 @@ React 19 + TypeScript + Tailwind CSS v4 + Vite 6 + Vercel
 
 ## 许可证
 
-本项目基于 [MIT 许可证](LICENSE) 开源。
+本项目基于 [GNU Affero General Public License v3.0](LICENSE) 开源。
 
-简单来说：你可以自由使用、修改和分发本项目，包括商业用途，无需公开源代码。
+简单来说：你可以自由使用、学习和修改本项目。但如果你分发修改后的版本（包括作为网络服务），你**必须**以 AGPL-3.0 许可证公开你的源代码。
 
 你可以：
 - ✅ 个人使用、学习和研究
 - ✅ 修改和适配用于任何目的
-- ✅ 用于商业产品和服务
-- ✅ 分发和再授权
+- ✅ 作为网络服务使用
 
 你必须：
+- 📋 如果你分发或以网络服务形式提供修改版本，必须以 AGPL-3.0 公开源代码
 - 📝 保留原始版权声明和许可证文本
 
-核心原则：随便用，保留许可证就行。
+核心原则：共享精神 — 如果你改进了它，就把改进分享给社区。

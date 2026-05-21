@@ -5,7 +5,7 @@
 [English](#english) | [中文](./README_CN.md)
 
 [![GitHub stars](https://img.shields.io/github/stars/Thomaszhou22/markdown-fuser?style=social)](https://github.com/Thomaszhou22/markdown-fuser/stargazers)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](LICENSE)
 [![Deploy with Vercel](https://img.shields.io/badge/Vercel-indigo?style=flat&logo=vercel)](https://markdown-fuser.vercel.app)
 
 [Live Demo](https://markdown-fuser.vercel.app) | [GitHub](https://github.com/Thomaszhou22/markdown-fuser) | [Research](#-research-background)
@@ -125,17 +125,17 @@ React 19 + TypeScript + Tailwind CSS v4 + Vite 6 + Vercel
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [GNU Affero General Public License v3.0](LICENSE).
 
-In simple terms: You can freely use, modify, and distribute this project, including for commercial purposes. No source code disclosure required.
+In simple terms: You can freely use, study, and modify this project. However, if you distribute a modified version (including as a network service), you **must** also release your source code under AGPL-3.0.
 
 What you can do:
 - ✅ Personal use, learning, and research
 - ✅ Modify and adapt for any purpose
-- ✅ Use in commercial products and services
-- ✅ Distribute and sublicense
+- ✅ Use as a network service
 
 What you must do:
+- 📋 If you distribute or offer it as a network service, release your modified source code under AGPL-3.0
 - 📝 Include the original copyright notice and license text
 
-Core principle: Do whatever you want, just keep the license intact.
+Core principle: Share alike — if you improve it, share your improvements with the community.
