@@ -21,20 +21,16 @@ const estimateTokens = (t: string) => { const c = (t.match(/[\u4e00-\u9fff\u3040
 const STORAGE_KEY = 'markdown-fuser-'
 
 /* ─── Skill Categories & Prompts (based on VoltAgent/awesome-openclaw-skills taxonomy) ─── */
-const GENERIC_MERGE = `You are merging multiple skills in the same category.
-Rules: 1) Extract common rules, keep the most specific version. 2) Remove duplicates. 3) Merge overlapping sections. 4) Keep unique content from each source. 5) Convert verbose prose to concise bullets.
-Output format: # Merged [Category] Skill\n## Core Rules\n## Procedures\n## Quick Reference`
-
 const CATEGORIES: Record<SkillCategory, { label: string; canMerge: boolean; mergePrompt: string }> = {
   'web-frontend': { label: 'Web & Frontend Development', canMerge: true, mergePrompt: `You are merging frontend/web development skills.
 Rules: 1) Unify component patterns (prefer the more robust version). 2) Merge performance guidelines, remove duplicates. 3) Combine CSS/styling conventions into one set. 4) Keep framework-specific rules under clear headings. 5) Merge accessibility rules into a single checklist.
 Output: # Merged Web Development Guide\n## Component Patterns\n## Performance Rules\n## Styling Conventions\n## Accessibility Checklist\n## Quick Reference` },
   'devops-cloud': { label: 'DevOps & Cloud', canMerge: true, mergePrompt: `You are merging DevOps/cloud deployment skills.
 Rules: 1) Merge deployment steps into a unified flow. 2) Combine CI/CD configurations. 3) Unify environment variable handling. 4) Keep platform-specific sections separate under headings.
-Output: # Merged DevOps Guide\n## Deployment Flow\n## CI/CD Configuration\n## Environment Config\n## Platform-Specific Notes` },
+Output: # Merged DevOps Guide\n## Deployment Flow\n## CI/CD Configuration\n## Environment Config\n## Platform-Specific Notes\n## Quick Reference` },
   'ai-llm': { label: 'AI & LLMs', canMerge: true, mergePrompt: `You are merging AI/LLM-related skills.
 Rules: 1) Merge prompt engineering guidelines. 2) Combine model selection strategies. 3) Unify API usage patterns. 4) Keep provider-specific notes separate.
-Output: # Merged AI/LLM Guide\n## Prompt Engineering\n## Model Selection\n## API Patterns\n## Provider Notes` },
+Output: # Merged AI/LLM Guide\n## Prompt Engineering\n## Model Selection\n## API Patterns\n## Provider Notes\n## Quick Reference` },
   'security': { label: 'Security & Passwords', canMerge: true, mergePrompt: `You are merging security skills.
 Rules: 1) Combine security checklists, remove duplicates. 2) Merge threat models. 3) Unify authentication/authorization rules. 4) NEVER remove any security rule — when in doubt, keep both.
 Output: # Merged Security Guide\n## Mandatory Security Rules\n## Threat Checklist\n## Auth Procedures\n## Quick Reference` },
@@ -43,7 +39,7 @@ Rules: 1) Merge command references into one table. 2) Combine workflow steps. 3)
 Output: # Merged CLI Guide\n## Commands Reference\n## Workflows\n## Configuration\n## Quick Reference` },
   'git-github': { label: 'Git & GitHub', canMerge: true, mergePrompt: `You are merging Git/GitHub skills.
 Rules: 1) Merge branching strategies into one. 2) Combine PR/review workflows. 3) Unify commit conventions. 4) Merge CI integration rules.
-Output: # Merged Git/GitHub Guide\n## Branching Strategy\n## PR & Review Flow\n## Commit Conventions\n## CI Integration` },
+Output: # Merged Git/GitHub Guide\n## Branching Strategy\n## PR & Review Flow\n## Commit Conventions\n## CI Integration\n## Quick Reference` },
   'data-analytics': { label: 'Data & Analytics', canMerge: true, mergePrompt: `You are merging data/analytics skills.
 Rules: 1) Merge data processing pipelines. 2) Combine query patterns. 3) Unify visualization guidelines. 4) Keep tool-specific sections separate.
 Output: # Merged Data Analytics Guide\n## Processing Pipeline\n## Query Patterns\n## Visualization Rules\n## Quick Reference` },
@@ -53,25 +49,63 @@ Output: # Merged Coding Agent Guide\n## Configuration\n## Extensions & Plugins\n
   'browser-automation': { label: 'Browser & Automation', canMerge: true, mergePrompt: `You are merging browser automation skills.
 Rules: 1) Merge automation workflows. 2) Combine selector strategies. 3) Unify error handling for web interactions. 4) Keep tool-specific API references separate.
 Output: # Merged Browser Automation Guide\n## Automation Workflows\n## Selector Strategies\n## Error Handling\n## Quick Reference` },
-  'productivity': { label: 'Productivity & Tasks', canMerge: true, mergePrompt: GENERIC_MERGE },
-  'ios-macos': { label: 'iOS & macOS Development', canMerge: true, mergePrompt: GENERIC_MERGE },
-  'communication': { label: 'Communication', canMerge: true, mergePrompt: GENERIC_MERGE },
-  'pdf-documents': { label: 'PDF & Documents', canMerge: true, mergePrompt: GENERIC_MERGE },
-  'search-research': { label: 'Search & Research', canMerge: true, mergePrompt: GENERIC_MERGE },
-  'notes-pkm': { label: 'Notes & PKM', canMerge: true, mergePrompt: GENERIC_MERGE },
-  'speech': { label: 'Speech & Transcription', canMerge: true, mergePrompt: GENERIC_MERGE },
-  'image-video': { label: 'Image & Video Generation', canMerge: true, mergePrompt: GENERIC_MERGE },
-  'marketing': { label: 'Marketing & Sales', canMerge: true, mergePrompt: GENERIC_MERGE },
-  'self-hosted': { label: 'Self-Hosted & Automation', canMerge: true, mergePrompt: GENERIC_MERGE },
-  'shopping-ecommerce': { label: 'Shopping & E-Commerce', canMerge: true, mergePrompt: GENERIC_MERGE },
-  'smart-home': { label: 'Smart Home & IoT', canMerge: true, mergePrompt: GENERIC_MERGE },
-  'calendar': { label: 'Calendar & Scheduling', canMerge: true, mergePrompt: GENERIC_MERGE },
-  'health': { label: 'Health & Fitness', canMerge: true, mergePrompt: GENERIC_MERGE },
-  'transportation': { label: 'Transportation', canMerge: true, mergePrompt: GENERIC_MERGE },
-  'gaming': { label: 'Gaming', canMerge: true, mergePrompt: GENERIC_MERGE },
-  'media-streaming': { label: 'Media & Streaming', canMerge: true, mergePrompt: GENERIC_MERGE },
-  'apple-apps': { label: 'Apple Apps & Services', canMerge: true, mergePrompt: GENERIC_MERGE },
-  'personal-dev': { label: 'Personal Development', canMerge: true, mergePrompt: GENERIC_MERGE },
+  'productivity': { label: 'Productivity & Tasks', canMerge: true, mergePrompt: `You are merging productivity & task management skills.
+Rules: 1) Combine task organization methods into a unified system. 2) Merge priority frameworks — keep the most actionable version. 3) Unify time management techniques. 4) Keep tool-specific workflows under separate headings. 5) Keep unique automation tips from each source.
+Output: # Merged Productivity Guide\n## Task Organization System\n## Priority Framework\n## Time Management\n## Automation Tips\n## Quick Reference` },
+  'ios-macos': { label: 'iOS & macOS Development', canMerge: true, mergePrompt: `You are merging iOS & macOS development skills.
+Rules: 1) Merge Swift/UI patterns, keep the most modern approach. 2) Combine Apple platform APIs into one reference. 3) Unify Xcode configuration best practices. 4) Keep framework-specific notes (UIKit vs SwiftUI) separate. 5) Merge App Store submission checklists.
+Output: # Merged Apple Development Guide\n## Swift Patterns\n## Platform APIs\n## Xcode Configuration\n## App Store Checklist\n## Quick Reference` },
+  'communication': { label: 'Communication', canMerge: true, mergePrompt: `You are merging communication & messaging skills.
+Rules: 1) Merge messaging workflows (email, chat, notifications) into one flow. 2) Combine template/formatter rules. 3) Unify channel-specific conventions. 4) Keep platform-specific API patterns separate. 5) Merge tone/voice guidelines into one set.
+Output: # Merged Communication Guide\n## Messaging Workflows\n## Templates & Formatting\n## Channel Conventions\n## Quick Reference` },
+  'pdf-documents': { label: 'PDF & Documents', canMerge: true, mergePrompt: `You are merging PDF & document processing skills.
+Rules: 1) Merge document parsing strategies. 2) Combine extraction patterns (tables, forms, text). 3) Unify generation/formatting rules. 4) Keep library-specific API references separate. 5) Merge OCR and text recognition tips.
+Output: # Merged Document Processing Guide\n## Parsing Strategies\n## Extraction Patterns\n## Generation & Formatting\n## Quick Reference` },
+  'search-research': { label: 'Search & Research', canMerge: true, mergePrompt: `You are merging search & research skills.
+Rules: 1) Merge search strategies and query formulation techniques. 2) Combine source evaluation criteria. 3) Unify research workflows into a single process. 4) Keep tool-specific search operators separate. 5) Merge citation and fact-checking procedures.
+Output: # Merged Research Guide\n## Search Strategies\n## Source Evaluation\n## Research Workflow\n## Citation & Fact-Checking\n## Quick Reference` },
+  'notes-pkm': { label: 'Notes & PKM', canMerge: true, mergePrompt: `You are merging notes & personal knowledge management skills.
+Rules: 1) Merge note-taking frameworks (Zettelkasten, PARA, etc.) into a unified approach. 2) Combine linking/tagging conventions. 3) Unify review and spaced repetition schedules. 4) Keep app-specific workflows separate. 5) Merge organization principles.
+Output: # Merged PKM Guide\n## Note-Taking Framework\n## Linking & Tagging\n## Review Schedule\n## Organization Principles\n## Quick Reference` },
+  'speech': { label: 'Speech & Transcription', canMerge: true, mergePrompt: `You are merging speech & transcription skills.
+Rules: 1) Merge audio processing pipelines. 2) Combine transcription accuracy tips. 3) Unify language/accent handling strategies. 4) Keep provider-specific API patterns separate. 5) Merge voice synthesis guidelines.
+Output: # Merged Speech Guide\n## Audio Processing Pipeline\n## Transcription Accuracy\n## Language Handling\n## Voice Synthesis\n## Quick Reference` },
+  'image-video': { label: 'Image & Video Generation', canMerge: true, mergePrompt: `You are merging image & video generation skills.
+Rules: 1) Merge prompt engineering techniques for visual generation. 2) Combine aspect ratio, resolution, and quality settings. 3) Unify style/art direction guidelines. 4) Keep model-specific parameters separate. 5) Merge post-processing workflows.
+Output: # Merged Visual Generation Guide\n## Prompt Engineering\n## Quality Settings\n## Style Direction\n## Post-Processing\n## Quick Reference` },
+  'marketing': { label: 'Marketing & Sales', canMerge: true, mergePrompt: `You are merging marketing & sales skills.
+Rules: 1) Merge content strategy frameworks. 2) Combine audience targeting methods. 3) Unify campaign execution checklists. 4) Keep platform-specific advertising rules separate. 5) Merge analytics and KPI definitions.
+Output: # Merged Marketing Guide\n## Content Strategy\n## Audience Targeting\n## Campaign Checklist\n## Analytics & KPIs\n## Quick Reference` },
+  'self-hosted': { label: 'Self-Hosted & Automation', canMerge: true, mergePrompt: `You are merging self-hosted & automation skills.
+Rules: 1) Merge server setup procedures. 2) Combine Docker/compose configurations. 3) Unify reverse proxy and domain setup. 4) Keep service-specific deployment notes separate. 5) Merge backup and monitoring procedures.
+Output: # Merged Self-Hosting Guide\n## Server Setup\n## Container Configuration\n## Networking & Domains\n## Backup & Monitoring\n## Quick Reference` },
+  'shopping-ecommerce': { label: 'Shopping & E-Commerce', canMerge: true, mergePrompt: `You are merging shopping & e-commerce skills.
+Rules: 1) Merge product search and comparison strategies. 2) Combine price tracking methods. 3) Unify checkout and payment workflows. 4) Keep platform-specific integration notes separate. 5) Merge inventory and order management procedures.
+Output: # Merged E-Commerce Guide\n## Product Search\n## Price Tracking\n## Checkout Workflows\n## Order Management\n## Quick Reference` },
+  'smart-home': { label: 'Smart Home & IoT', canMerge: true, mergePrompt: `You are merging smart home & IoT skills.
+Rules: 1) Merge device configuration procedures. 2) Combine automation rule patterns. 3) Unify network and protocol handling (Zigbee, Z-Wave, WiFi). 4) Keep hub/platform-specific notes separate. 5) Merge troubleshooting for common IoT issues.
+Output: # Merged Smart Home Guide\n## Device Setup\n## Automation Rules\n## Network & Protocols\n## Troubleshooting\n## Quick Reference` },
+  'calendar': { label: 'Calendar & Scheduling', canMerge: true, mergePrompt: `You are merging calendar & scheduling skills.
+Rules: 1) Merge scheduling algorithms and strategies. 2) Combine timezone handling rules. 3) Unify event creation and management workflows. 4) Keep platform-specific API notes separate. 5) Merge conflict resolution and booking procedures.
+Output: # Merged Scheduling Guide\n## Scheduling Strategies\n## Timezone Handling\n## Event Management\n## Conflict Resolution\n## Quick Reference` },
+  'health': { label: 'Health & Fitness', canMerge: true, mergePrompt: `You are merging health & fitness skills.
+Rules: 1) Merge health tracking data schemas. 2) Combine workout/exercise classification. 3) Unify nutrition logging procedures. 4) Keep device-specific integration notes separate. 5) Merge health metric calculation formulas.
+Output: # Merged Health & Fitness Guide\n## Data Tracking\n## Exercise Classification\n## Nutrition Logging\n## Metric Calculations\n## Quick Reference` },
+  'transportation': { label: 'Transportation', canMerge: true, mergePrompt: `You are merging transportation & travel skills.
+Rules: 1) Merge route planning algorithms. 2) Combine booking and reservation workflows. 3) Unify real-time tracking data handling. 4) Keep service-specific API notes separate. 5) Merge fare calculation and comparison methods.
+Output: # Merged Transportation Guide\n## Route Planning\n## Booking Workflows\n## Real-Time Tracking\n## Fare Calculation\n## Quick Reference` },
+  'gaming': { label: 'Gaming', canMerge: true, mergePrompt: `You are merging gaming skills.
+Rules: 1) Merge game development patterns and architectures. 2) Combine input handling methods. 3) Unify rendering and performance optimization rules. 4) Keep engine-specific notes separate. 5) Merge multiplayer/networking best practices.
+Output: # Merged Gaming Guide\n## Game Architecture\n## Input Handling\n## Performance Optimization\n## Multiplayer Networking\n## Quick Reference` },
+  'media-streaming': { label: 'Media & Streaming', canMerge: true, mergePrompt: `You are merging media & streaming skills.
+Rules: 1) Merge audio/video processing pipelines. 2) Combine streaming protocol configurations. 3) Unify transcoding quality presets. 4) Keep platform-specific integration notes separate. 5) Merge content delivery and caching strategies.
+Output: # Merged Media Streaming Guide\n## Processing Pipeline\n## Streaming Protocols\n## Transcoding Presets\n## Content Delivery\n## Quick Reference` },
+  'apple-apps': { label: 'Apple Apps & Services', canMerge: true, mergePrompt: `You are merging Apple apps & services skills.
+Rules: 1) Merge Apple ecosystem integration patterns. 2) Combine iCloud, Continuity, and Handoff workflows. 3) Unify AppleScript and Shortcuts automation rules. 4) Keep app-specific configuration notes separate. 5) Merge privacy and permissions handling.
+Output: # Merged Apple Services Guide\n## Ecosystem Integration\n## Cloud & Sync\n## Automation (Script/Shortcuts)\n## Privacy & Permissions\n## Quick Reference` },
+  'personal-dev': { label: 'Personal Development', canMerge: true, mergePrompt: `You are merging personal development skills.
+Rules: 1) Merge goal-setting frameworks (OKR, SMART, etc.). 2) Combine habit tracking and building methods. 3) Unify journaling and reflection templates. 4) Keep methodology-specific notes separate. 5) Merge progress measurement and review schedules.
+Output: # Merged Personal Development Guide\n## Goal-Setting Framework\n## Habit Building\n## Reflection Templates\n## Progress Review\n## Quick Reference` },
   'openclaw-tools': { label: 'OpenClaw Tools', canMerge: false, mergePrompt: '' },
   'other': { label: 'Other', canMerge: false, mergePrompt: '' },
 }
