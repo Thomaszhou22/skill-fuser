@@ -149,34 +149,6 @@ const DEMO_CLASSIFICATIONS: { name: string; category: SkillCategory }[] = [
 ]
 
 const DEMO_MERGED_BY_RATIO: Record<number, Record<string, string>> = {
-  10: {
-    'web-frontend': `# Web Dev Rules\n\n- Functional components + TypeScript, <200 lines\n- Tailwind: mobile-first, no arbitrary colors\n- State: useState → useReducer → Context\n- Strict TS: no implicit any\n- Memoize expensive comps, lazy load routes`,
-    'security': `# Security\n\n- bcrypt >= 12, HTTPS only, validate all inputs, rate limit 100/min`,
-    'git-github': `# Git Rules\n\n- feat/ | fix/ branches, squash merge, conventional commits`,
-    'coding-agents': `# Agent Rules\n\n- Review 24h, Reproduce → Isolate → Fix → Verify`,
-    'devops-cloud': `# Deploy\n\n- Vite build → dist/, VITE_ prefix, /* → index.html`,
-  },
-  20: {
-    'web-frontend': `# Web Dev Guide\n\n## Components\n- Functional + TypeScript, <200 lines, custom hooks for logic\n## Styling\n- Tailwind mobile-first, amber primary, extend config\n## State\n- useState → useReducer → Context\n## TS\n- Strict mode, no implicit any, optional chaining\n## Perf\n- useMemo, React.memo, React.lazy`,
-    'security': `# Security\n\n- bcrypt >= 12, HTTPS everywhere\n- Validate inputs, sanitize HTML, parameterized queries\n- Rate limit 100/min, CORS explicit origins`,
-    'git-github': `# Git\n\n- feat/fix branches → squash merge\n- Conventional commits, 72 char limit\n- 1 approval, PR needs test plan`,
-    'coding-agents': `# Code Agent\n\n## Review\n- 24h response, blocking: security/missing errors\n## Debug\n- Reproduce → Isolate → Fix → Verify`,
-    'devops-cloud': `# DevOps\n\n- Vite build → dist/\n- VITE_ env prefix\n- SPA fallback /* → index.html`,
-  },
-  30: {
-    'web-frontend': `# Web Development Guide\n\n## Component Patterns\n- Functional components with TypeScript\n- Keep under 200 lines, custom hooks for logic\n- Props interface exported\n\n## Styling (Tailwind)\n- Mobile-first: base → sm → md → lg\n- Amber primary, no arbitrary colors\n- Extend tailwind config\n\n## State & Types\n- useState → useReducer → Context\n- Strict mode, no implicit any\n\n## Performance\n- useMemo, React.memo, React.lazy`,
-    'security': `# Security Guide\n\n- bcrypt >= 12 salt rounds\n- HTTPS everywhere, validate all inputs\n- Sanitize HTML, parameterized queries\n- Rate limit 100/min, CORS explicit origins\n- Session tokens expire 24h`,
-    'git-github': `# Git/GitHub\n\n- feat/ | fix/ branches, delete after merge\n- Conventional commits, 72 char subject\n- 1 approval, squash merge, test plan required`,
-    'coding-agents': `# Coding Agent Guide\n\n## Review\n- Checklist: logic, errors, perf, security\n- 24h response, constructive tone\n\n## Debug\n- Reproduce → Isolate → Fix → Verify`,
-    'devops-cloud': `# DevOps\n\n- Vite build → dist/, Node 18\n- VITE_ prefix for client vars\n- SPA fallback /* → index.html`,
-  },
-  40: {
-    'web-frontend': `# Web Development Guide\n\n## Component Patterns\n- Functional components with TypeScript\n- Under 200 lines, custom hooks for complex logic\n- Export props interface\n\n## Styling Conventions\n- Mobile-first: base → sm → md → lg\n- Amber palette primary, gray-50/100 bg\n- Never arbitrary colors, extend config\n- Consistent spacing: p-4, gap-4\n\n## State Management\n- useState for local, useReducer for complex\n- Context for cross-component\n- Never store derived state\n\n## TypeScript\n- Strict mode, no implicit any\n- Interfaces for objects, types for unions\n\n## Performance\n- useMemo, React.memo, React.lazy`,
-    'security': `# Security Guide\n\n- bcrypt >= 12, sessions expire 24h\n- HTTPS everywhere\n- Validate all inputs server-side\n- Sanitize HTML, parameterized queries\n- Rate limit 100/min, CORS explicit origins`,
-    'git-github': `# Git/GitHub Guide\n\n- feat/ | fix/ branches, delete after merge\n- Conventional commits, 72 char subject\n- 1 approval before merge, squash merge\n- PR: test plan + linked issues`,
-    'coding-agents': `# Coding Agent Guide\n\n## Code Review\n- Checklist: logic, errors, perf, security, tests\n- 24h response, be constructive\n- Blocking: security, missing errors\n\n## Debugging\n- Reproduce → Isolate → Fix → Verify\n- Write reproduction test`,
-    'devops-cloud': `# DevOps Guide\n\n- Vite build → dist/, Node 18.x\n- VITE_ prefix for client vars\n- SPA: /* → index.html\n- HTTPS auto-enabled`,
-  },
   50: {
     'web-frontend': `# Merged Web Development Guide\n\n## Component Patterns\n- Use functional components with TypeScript\n- Keep components under 200 lines\n- Use custom hooks for complex logic\n- Props interface must be exported\n\n## Styling Conventions (Tailwind)\n- Mobile-first responsive: base → sm → md → lg\n- Max-width containers: max-w-6xl mx-auto\n- Use amber palette for primary, gray-50/100 for bg\n- Never use arbitrary colors — extend tailwind config\n- Consistent spacing: p-4, gap-4 as base units\n\n## State Management\n- Use useState for local state\n- Use useReducer for complex state\n- Use Context for cross-component state\n- Never store derived state\n\n## TypeScript Strict Mode\n- Enable strict mode in tsconfig\n- No implicit any — explicit types always\n- Use interfaces for objects, types for unions\n- Use optional chaining (?.) and nullish coalescing (??)\n\n## Performance\n- Memoize expensive computations with useMemo\n- Use React.memo for pure components\n- Lazy load routes with React.lazy`,
     'security': `# Security Guide\n\n- bcrypt >= 12, sessions expire 24h\n- HTTPS everywhere\n- Validate all inputs server-side\n- Sanitize HTML, parameterized queries\n- Rate limit 100/min, CORS explicit origins\n- API keys in headers only`,
@@ -652,6 +624,7 @@ Output ONLY valid JSON array: [{"name":"...","category":"..."}]. No explanation,
                   <button onClick={() => { setFavName(''); setModal('favorites') }} className="px-2 py-0.5 rounded text-[10px] text-amber-600 hover:bg-amber-50 transition border border-transparent hover:border-amber-200">Save</button>
                   <button onClick={() => navigator.clipboard.writeText(result)} className="px-2 py-0.5 rounded text-[10px] text-gray-500 hover:bg-gray-50 transition border border-transparent hover:border-[#e0d8c8]">Copy</button>
                   <button onClick={() => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([result], { type: 'text/markdown' })); a.download = 'fused-skill.md'; a.click() }} className="px-2 py-0.5 rounded text-[10px] text-gray-500 hover:bg-gray-50 transition border border-transparent hover:border-[#e0d8c8]">Download</button>
+                  <button onClick={() => { setSkills([{ id: uid(), name: '', content: '' }]); setResult(''); setFusionGroups([]); setPhase('idle'); setError(''); setRatio(50) }} className="px-2.5 py-0.5 rounded text-[10px] font-medium text-white bg-amber-500 hover:bg-amber-600 transition">New</button>
                 </div>
               )}
             </div>
