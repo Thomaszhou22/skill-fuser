@@ -246,7 +246,16 @@ Keep safety/error/numbered procedures verbatim. Drop motivation, merge variants,
           </div>
           {mode === 'fusion' && (
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white border border-[#e0d8c8]">
-              <span className="text-[11px] text-gray-500">Target Output</span>
+              <span className="text-[11px] text-gray-500 relative group cursor-help">
+                Target Output
+                <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2.5 rounded-lg bg-gray-800 text-white text-[10px] leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                  <span className="font-semibold text-amber-400">How Target Output works:</span><br />
+                  Higher token count = more detailed fusion result with better preservation of rules, examples, and edge cases.<br /><br />
+                  Lower token count = aggressive compression, keeps only core rules. May lose important details.<br /><br />
+                  <span className="text-gray-400">Recommended: 30-50% of input tokens for balanced results.</span>
+                  <span className="absolute top-full left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-800 rotate-45 -mt-1" />
+                </span>
+              </span>
               <input type="range" min={200} max={20000} step={100} value={budget} onChange={e => setBudget(+e.target.value)} className="w-20 accent-amber-500" />
               <input type="number" value={budget} onChange={e => setBudget(+e.target.value)} className="w-16 bg-[#f5f0e8] border border-[#e0d8c8] rounded-md px-2 py-0.5 text-[11px] text-center focus:outline-none focus:border-amber-500/50 font-mono" />
               <span className="text-[10px] text-gray-400">tokens (from {totalTok} input)</span>
