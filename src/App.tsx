@@ -33,6 +33,7 @@ export default function App() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [activeTab, setActiveTab] = useState<'input' | 'output'>('input')
+  const [showSettings, setShowSettings] = useState(false)
 
   const totalTokens = skills.reduce((s, sk) => s + estimateTokens(sk.content), 0)
 
@@ -77,23 +78,40 @@ export default function App() {
       .map((s, i) => `<skill_${i + 1} name="${s.name}">\n${s.content}\n</skill_${i + 1}>`)
       .join('\n\n')
 
-    const systemPrompt = `You are a Markdown Fusion expert. Your job is to merge multiple AI agent skill/prompt markdown files into a SINGLE optimized markdown document.
+    const skillCount = skills.filter(s => s.content.trim()).length
 
-RULES:
-1. Merge overlapping sections (e.g. multiple "Rules" sections → one consolidated "Rules" section)
-2. Remove redundancy and repetition
-3. Keep ALL unique, non-overlapping instructions and information
-4. The merged output must fit within approximately ${tokenBudget} tokens
-5. Prioritize by importance: safety rules > core workflow > guidelines > examples > extras
-6. If you must cut content to fit the budget, cut examples and verbose explanations first
-7. Use concise language — replace verbose descriptions with bullet points
-8. Output ONLY the final merged markdown, no explanations before or after
-9. Maintain markdown formatting (headers, lists, code blocks, tables)
+    const systemPrompt = `Merge ${skillCount} AI agent skill documents into one compressed file.
+Target: ≤${tokenBudget} tokens (from ~${totalTokens}).
 
-Current total: ~${totalTokens} tokens. Target: ~${tokenBudget} tokens.
-Compression ratio needed: ${totalTokens > 0 ? ((tokenBudget / totalTokens) * 100).toFixed(0) : '100'}%`
+You are writing instructions loaded into an AI coding agent's context. Every token counts — but losing a critical rule costs more than tokens saved.
 
-    const userPrompt = `Merge these ${skills.filter(s => s.content.trim()).length} skill documents into one optimized markdown:\n\n${skillsMarkdown}`
+COMPRESSION TECHNIQUES (apply aggressively):
+• Drop ALL motivation/rationale ("Why git matters", "Why reviews are important")
+• Convert prose to bullets: "You should always make sure to" → "Always"
+• Merge similar items: 5 "commit early" variants → 1 definitive rule
+• Consolidate tables: separate tables → one combined table where topics overlap
+• Replace long code examples with inline patterns
+• Remove section headers containing only 1-2 items (fold into parent)
+• Replace repetition with cross-references: "See commit rules above"
+
+PRESERVATION RULES (never cut):
+• Safety/security constraints and "never do X" directives
+• Numbered step-by-step procedures (workflows)
+• Error handling requirements
+• Red flag / anti-pattern lists
+• Unique rules not duplicated across inputs
+• Essential configuration or code patterns not obvious from context
+
+OUTPUT STRUCTURE:
+# [Descriptive fused title]
+## Core Rules
+## Workflows
+## Quick Reference
+## Red Flags
+
+Output markdown only. No commentary before or after.`
+
+    const userPrompt = `Fuse these ${skillCount} skill documents into one within ${tokenBudget} tokens:\n\n${skillsMarkdown}`
 
     try {
       let merged = ''
@@ -198,7 +216,16 @@ Compression ratio needed: ${totalTokens > 0 ? ((tokenBudget / totalTokens) * 100
       </header>
 
       <main className="max-w-6xl mx-auto px-4 py-6">
+        {/* Settings Toggle */}
+        <button
+          onClick={() => setShowSettings(!showSettings)}
+          className="mb-4 px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition text-sm text-gray-400 flex items-center gap-2"
+        >
+          ⚙️ API Settings {showSettings ? '▲' : '▼'}
+        </button>
+
         {/* Settings Bar */}
+        {showSettings && (
         <div className="mb-6 p-4 rounded-xl bg-gray-900 border border-gray-800">
           <div className="flex flex-wrap gap-4 items-end">
             <div className="flex-1 min-w-[200px]">
@@ -257,6 +284,7 @@ Compression ratio needed: ${totalTokens > 0 ? ((tokenBudget / totalTokens) * 100
             </div>
           </div>
         </div>
+        )}
 
         {/* Tab Switcher (mobile) */}
         <div className="flex mb-4 md:hidden">
