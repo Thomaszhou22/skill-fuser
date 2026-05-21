@@ -810,7 +810,7 @@ Output ONLY valid JSON array: [{"name":"...","category":"..."}]. No explanation,
             <button onClick={() => setMode('fusion')} className={`px-4 py-1.5 rounded-md text-xs font-medium transition-all ${mode === 'fusion' ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow shadow-amber-600/20' : 'text-gray-500 hover:text-gray-700'}`}>Fusion</button>
             <button onClick={() => setMode('analysis')} className={`px-4 py-1.5 rounded-md text-xs font-medium transition-all ${mode === 'analysis' ? 'bg-gradient-to-r from-amber-600 to-orange-500 text-white shadow shadow-orange-500/20' : 'text-gray-500 hover:text-gray-700'}`}>Analysis</button>
           </div>
-          {mode === 'fusion' && (
+          {mode === 'fusion' && (<>
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white border border-[#e0d8c8]">
               <span className="text-[11px] text-gray-500 relative group cursor-help">
                 Target Output
@@ -824,9 +824,9 @@ Output ONLY valid JSON array: [{"name":"...","category":"..."}]. No explanation,
               </span>
               <div className="flex gap-1">{[50, 60, 70, 80, 90].map(r => (<button key={r} onClick={() => setRatio(r)} className={`px-2 py-0.5 rounded text-[10px] font-medium transition ${ratio === r ? 'bg-amber-500 text-white' : 'bg-[#f5f0e8] text-gray-500 hover:bg-amber-100'}`}>{r}%</button>))}</div>
               <span className="text-[10px] text-gray-400">~{budget} tokens</span>
-              <button onClick={() => { setSkills([{ id: uid(), name: '', content: '' }]); setResult(''); setFusionGroups([]); setPhase('idle'); setError(''); setRatio(50) }} className="px-2.5 py-0.5 rounded text-[10px] font-medium text-gray-400 hover:text-gray-600 hover:bg-white border border-transparent hover:border-[#e0d8c8] transition ml-1">Clear</button>
             </div>
-          )}
+            <button onClick={() => { setSkills([{ id: uid(), name: '', content: '' }]); setResult(''); setFusionGroups([]); setPhase('idle'); setError(''); setRatio(50) }} className="px-3 py-1.5 rounded-lg text-[11px] font-medium bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow shadow-amber-500/20 hover:from-amber-400 hover:to-amber-500 transition">Clear</button>
+          </>)}
           {outTok > 0 && (
             <div className="ml-auto flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-50 border border-green-200">
               <span className="text-[11px] text-green-600 font-medium">{compressionRatio}% compressed</span>
