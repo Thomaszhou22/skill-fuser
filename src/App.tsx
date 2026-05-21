@@ -588,7 +588,7 @@ Output ONLY valid JSON array: [{"name":"...","category":"..."}]. No explanation,
                   <span className="absolute top-full left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-800 rotate-45 -mt-1" />
                 </span>
               </span>
-              <div className="flex gap-1">{[10, 20, 30, 40, 50, 60, 70, 80, 90].map(r => (<button key={r} onClick={() => setRatio(r)} className={`px-2 py-0.5 rounded text-[10px] font-medium transition ${ratio === r ? 'bg-amber-500 text-white' : 'bg-[#f5f0e8] text-gray-500 hover:bg-amber-100'}`}>{r}%</button>))}</div>
+              <div className="flex gap-1">{[50, 60, 70, 80, 90].map(r => (<button key={r} onClick={() => setRatio(r)} className={`px-2 py-0.5 rounded text-[10px] font-medium transition ${ratio === r ? 'bg-amber-500 text-white' : 'bg-[#f5f0e8] text-gray-500 hover:bg-amber-100'}`}>{r}%</button>))}</div>
               <span className="text-[10px] text-gray-400">~{budget} tokens</span>
             </div>
           )}
