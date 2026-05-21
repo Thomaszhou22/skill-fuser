@@ -246,10 +246,10 @@ Keep safety/error/numbered procedures verbatim. Drop motivation, merge variants,
           </div>
           {mode === 'fusion' && (
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white border border-[#e0d8c8]">
-              <span className="text-[11px] text-gray-500">Budget</span>
+              <span className="text-[11px] text-gray-500">Target Output</span>
               <input type="range" min={200} max={20000} step={100} value={budget} onChange={e => setBudget(+e.target.value)} className="w-20 accent-amber-500" />
               <input type="number" value={budget} onChange={e => setBudget(+e.target.value)} className="w-16 bg-[#f5f0e8] border border-[#e0d8c8] rounded-md px-2 py-0.5 text-[11px] text-center focus:outline-none focus:border-amber-500/50 font-mono" />
-              <span className="text-[10px] text-gray-400 font-mono">{totalTok} tok input</span>
+              <span className="text-[10px] text-gray-400">tokens (from {totalTok} input)</span>
             </div>
           )}
           {outTok > 0 && (
