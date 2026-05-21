@@ -125,6 +125,41 @@ function loadJSON<T>(key: string, fallback: T): T {
 }
 function saveJSON(key: string, data: unknown) { localStorage.setItem(STORAGE_KEY + key, JSON.stringify(data)) }
 
+/* ─── Demo Mock Data ─── */
+const DEMO_SKILLS: SkillInput[] = [
+  { id: 'd1', name: 'react-patterns', content: `# React Component Patterns\n\n## Rules\n- Use functional components with TypeScript\n- Keep components under 200 lines\n- Use custom hooks for complex logic\n- Props interface must be exported\n\n## State Management\n- Use useState for local state\n- Use useReducer for complex state\n- Use Context for cross-component state\n- Never store derived state\n\n## Performance\n- Memoize expensive computations with useMemo\n- Use React.memo for pure components\n- Lazy load routes with React.lazy\n- Avoid inline object/function creation in render` },
+  { id: 'd2', name: 'tailwind-styling', content: `# Tailwind CSS Conventions\n\n## Layout Rules\n- Use flexbox by default, grid for 2D layouts\n- Mobile-first responsive: base → sm → md → lg\n- Max-width containers: max-w-6xl mx-auto\n- Consistent spacing: p-4, gap-4 as base units\n\n## Color System\n- Use amber palette for primary actions\n- Gray-50/100 for backgrounds, gray-900 for text\n- Never use arbitrary colors — extend tailwind config\n\n## Animation\n- Use transition-all by default (150ms)\n- Animate spin for loading states\n- Hover states must have smooth transitions` },
+  { id: 'd3', name: 'security-checklist', content: `# Security Best Practices\n\n## Authentication\n- Never store passwords in plain text\n- Use bcrypt with salt rounds >= 12\n- Implement rate limiting on login endpoints\n- Session tokens must expire after 24h\n\n## Input Validation\n- Validate ALL user inputs on server side\n- Sanitize HTML to prevent XSS\n- Use parameterized queries to prevent SQL injection\n- Maximum input length: 10,000 chars\n\n## API Security\n- Use HTTPS everywhere\n- API keys must be in headers, not URL params\n- Implement CORS with explicit origins\n- Rate limit: 100 req/min per user` },
+  { id: 'd4', name: 'git-workflow', content: `# Git Workflow Rules\n\n## Branching\n- main is always deployable\n- Feature branches: feat/description\n- Bug fixes: fix/description\n- Delete branches after merge\n\n## Commits\n- Conventional commits: feat: | fix: | docs: | refactor:\n- Max 72 char subject line\n- Body explains WHY, not WHAT\n- One logical change per commit\n\n## PR Rules\n- Require 1 approval before merge\n- Squash merge to main\n- PR description must include test plan\n- Link related issues` },
+  { id: 'd5', name: 'code-review-guide', content: `# Code Review Standards\n\n## Review Checklist\n- Logic correctness and edge cases\n- Error handling completeness\n- Performance implications\n- Security vulnerabilities\n- Test coverage for new code\n\n## Review Etiquette\n- Respond within 24 hours\n- Be constructive, not critical\n- Ask questions instead of making demands\n- Acknowledge good patterns\n\n## Blocking Issues\n- Security vulnerabilities → must fix\n- Missing error handling → must fix\n- Performance regression → must fix\n- Style issues → nit, non-blocking` },
+  { id: 'd6', name: 'vercel-deploy', content: `# Vercel Deployment Guide\n\n## Build Settings\n- Framework preset: Vite\n- Build command: npm run build\n- Output directory: dist\n- Node version: 18.x\n\n## Environment Variables\n- Set all env vars in Vercel dashboard\n- Use VITE_ prefix for client-side vars\n- Never expose server secrets in client code\n- Preview deployments get preview env vars\n\n## Domain & Routing\n- Use vercel.json for rewrites\n- SPA fallback: /* → /index.html\n- Redirect www to apex domain\n- Enable HTTPS automatically` },
+  { id: 'd7', name: 'typescript-strict', content: `# TypeScript Strict Mode\n\n## Type Rules\n- Enable strict mode in tsconfig\n- No implicit any — explicit types always\n- Use interfaces for objects, types for unions\n- Export all types used externally\n\n## Generics\n- Use generics for reusable utilities\n- Constrain generic parameters\n- Default generic parameters where sensible\n\n## Null Safety\n- Use optional chaining (?.)\n- Use nullish coalescing (??)\n- Enable strictNullChecks\n- Type guards for narrowing` },
+  { id: 'd8', name: 'debugging-protocol', content: `# Debugging Protocol\n\n## Step 1: Reproduce\n- Document exact reproduction steps\n- Note environment (browser, OS, version)\n- Check if it's reproducible in clean environment\n\n## Step 2: Isolate\n- Binary search to find the failing change\n- Use console.log strategically\n- Check network tab for API errors\n- Verify assumptions with assertions\n\n## Step 3: Fix & Verify\n- Write a test that reproduces the bug\n- Apply minimal fix\n- Verify test passes\n- Run full test suite to catch regressions` },
+]
+
+const DEMO_CLASSIFICATIONS: { name: string; category: SkillCategory }[] = [
+  { name: 'react-patterns', category: 'web-frontend' },
+  { name: 'tailwind-styling', category: 'web-frontend' },
+  { name: 'typescript-strict', category: 'web-frontend' },
+  { name: 'security-checklist', category: 'security' },
+  { name: 'git-workflow', category: 'git-github' },
+  { name: 'code-review-guide', category: 'coding-agents' },
+  { name: 'vercel-deploy', category: 'devops-cloud' },
+  { name: 'debugging-protocol', category: 'coding-agents' },
+]
+
+const DEMO_MERGED: Record<string, string> = {
+  'web-frontend': `# Merged Web Development Guide\n\n## Component Patterns\n- Use functional components with TypeScript\n- Keep components under 200 lines\n- Use custom hooks for complex logic\n- Props interface must be exported\n\n## Styling Conventions (Tailwind)\n- Mobile-first responsive: base → sm → md → lg\n- Max-width containers: max-w-6xl mx-auto\n- Use amber palette for primary, gray-50/100 for bg\n- Never use arbitrary colors — extend tailwind config\n- Consistent spacing: p-4, gap-4 as base units\n\n## State Management\n- Use useState for local state\n- Use useReducer for complex state\n- Use Context for cross-component state\n- Never store derived state\n\n## TypeScript Strict Mode\n- Enable strict mode in tsconfig\n- No implicit any — explicit types always\n- Use interfaces for objects, types for unions\n- Use optional chaining (?.) and nullish coalescing (??)\n- Enable strictNullChecks\n\n## Performance\n- Memoize expensive computations with useMemo\n- Use React.memo for pure components\n- Lazy load routes with React.lazy\n- Use transition-all (150ms) for animations\n\n## Quick Reference\n| Topic | Key Rule |\n|-------|----------|\n| Components | Functional + TypeScript, < 200 lines |\n| Styling | Tailwind, mobile-first, no arbitrary colors |\n| State | useState → useReducer → Context |\n| Types | Strict mode, no implicit any |`,
+
+  'security': `# Merged Security Guide\n\n## Authentication\n- Never store passwords in plain text\n- Use bcrypt with salt rounds >= 12\n- Implement rate limiting on login endpoints\n- Session tokens must expire after 24h\n\n## Input Validation\n- Validate ALL user inputs on server side\n- Sanitize HTML to prevent XSS\n- Use parameterized queries to prevent SQL injection\n- Maximum input length: 10,000 chars\n\n## API Security\n- Use HTTPS everywhere\n- API keys must be in headers, not URL params\n- Implement CORS with explicit origins\n- Rate limit: 100 req/min per user\n\n## Quick Reference\n- bcrypt >= 12 salt rounds\n- HTTPS everywhere\n- Validate all inputs server-side\n- Rate limit: 100 req/min`,
+
+  'git-github': `# Merged Git/GitHub Guide\n\n## Branching Strategy\n- main is always deployable\n- Feature: feat/description | Fix: fix/description\n- Delete branches after merge\n\n## Commit Conventions\n- Conventional commits: feat: | fix: | docs: | refactor:\n- Max 72 char subject, body explains WHY\n- One logical change per commit\n\n## PR & Review Flow\n- Require 1 approval before merge\n- Squash merge to main\n- PR must include test plan + linked issues\n\n## Quick Reference\n- feat/ | fix/ branches → squash merge to main\n- Conventional commits, 72 char limit`,
+
+  'coding-agents': `# Merged Coding Agent Guide\n\n## Code Review Standards\n- Review checklist: logic, errors, performance, security, tests\n- Respond within 24h, be constructive\n- Blocking: security vulns, missing errors, perf regression\n- Non-blocking: style issues\n\n## Debugging Protocol\n1. Reproduce — document exact steps, environment\n2. Isolate — binary search, console.log, network tab\n3. Fix & Verify — write reproduction test, minimal fix, full suite\n\n## Quick Reference\n- Review: 24h response, constructive tone\n- Debug: Reproduce → Isolate → Fix → Verify`,
+
+  'devops-cloud': `# Merged DevOps Guide\n\n## Vercel Deployment\n- Framework: Vite, Build: npm run build, Output: dist\n- Node 18.x, VITE_ prefix for client vars\n- vercel.json for rewrites, SPA fallback /* → /index.html\n- Redirect www → apex, HTTPS auto-enabled\n\n## Quick Reference\n- Build: npm run build → dist/\n- Env: VITE_ prefix for client\n- SPA: /* → /index.html`,
+}
+
 export default function App() {
   /* ─── State ─── */
   const [skills, setSkills] = useState<SkillInput[]>([{ id: uid(), name: '', content: '' }])
@@ -151,6 +186,53 @@ export default function App() {
   const totalTok = skills.reduce((s, k) => s + estimateTokens(k.content), 0)
   const outTok = estimateTokens(result)
   const ratio = totalTok > 0 && outTok > 0 ? Math.round((1 - outTok / totalTok) * 100) : 0
+
+  /* ─── Demo Run ─── */
+  const runDemo = useCallback(async () => {
+    setLoading(true); setError(''); setResult(''); setFusionGroups([])
+    setMode('fusion')
+    // Load demo skills
+    setSkills(DEMO_SKILLS)
+    const vs = DEMO_SKILLS.filter(s => s.content.trim())
+
+    // Phase 1: Simulate classification with delay
+    setPhase('classifying')
+    await new Promise(r => setTimeout(r, 1200))
+
+    // Build groups from pre-defined classifications
+    const groupMap = new Map<SkillCategory, { name: string; content: string }[]>()
+    vs.forEach((skill, i) => {
+      const cat = DEMO_CLASSIFICATIONS[i]?.category || 'other'
+      if (!groupMap.has(cat)) groupMap.set(cat, [])
+      groupMap.get(cat)!.push({ name: skill.name, content: skill.content })
+    })
+
+    const groups: FusionGroup[] = Array.from(groupMap.entries()).map(([cat, items]) => ({
+      category: cat, label: CATEGORIES[cat]?.label || 'Other', canMerge: CATEGORIES[cat]?.canMerge && items.length > 1, items
+    }))
+    setFusionGroups(groups)
+    setPhase('merging')
+
+    // Phase 2: Simulate merging with progressive reveal
+    for (let gi = 0; gi < groups.length; gi++) {
+      const g = groups[gi]
+      if (g.canMerge) {
+        setFusionGroups(prev => prev.map((fg, idx) => idx === gi ? { ...fg, loading: true } : fg))
+        await new Promise(r => setTimeout(r, 600 + Math.random() * 400))
+        const merged = DEMO_MERGED[g.category] || `# Merged ${g.label}\n\nMerged content for ${g.items.length} skills.`
+        groups[gi] = { ...g, result: merged, loading: false }
+        setFusionGroups(prev => prev.map((fg, idx) => idx === gi ? { ...fg, result: merged, loading: false } : fg))
+      }
+    }
+
+    // Build combined result
+    const allResults = groups.map(g => {
+      const header = `--- ${g.label} (${g.canMerge ? 'Merged' : 'Kept Separate'}) ---`
+      if (g.canMerge && g.result) return `${header}\n${g.result}`
+      return `${header}\n${g.items.map(it => `\n## ${it.name}\n${it.content}`).join('\n')}`
+    }).join('\n\n')
+    setResult(allResults); setPhase('done'); setLoading(false)
+  }, [])
 
   /* ─── Persist ─── */
   useEffect(() => { saveJSON('providers', providers) }, [providers])
@@ -369,6 +451,7 @@ Output ONLY valid JSON array: [{"name":"...","category":"..."}]. No explanation,
             <a href="https://github.com/Thomaszhou22/markdown-fuser" target="_blank" rel="noopener noreferrer" className="px-2.5 py-1.5 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-white border border-transparent hover:border-[#e0d8c8] transition" title="GitHub Repository"><svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg></a>
             <button onClick={() => setModal('favorites')} className="px-2.5 py-1.5 rounded-lg text-[11px] text-gray-500 hover:text-gray-700 hover:bg-white border border-transparent hover:border-[#e0d8c8] transition">Favorites</button>
             <button onClick={() => setModal('history')} className="px-2.5 py-1.5 rounded-lg text-[11px] text-gray-500 hover:text-gray-700 hover:bg-white border border-transparent hover:border-[#e0d8c8] transition">History</button>
+            <button onClick={runDemo} disabled={loading} className="px-3 py-1.5 rounded-lg text-[11px] font-medium bg-gradient-to-r from-amber-500 to-yellow-500 text-white shadow shadow-amber-500/20 hover:from-amber-400 hover:to-yellow-400 transition disabled:opacity-50">Run Demo</button>
             <button onClick={() => setModal('data')} className="px-2.5 py-1.5 rounded-lg text-[11px] text-gray-500 hover:text-gray-700 hover:bg-white border border-transparent hover:border-[#e0d8c8] transition">Data</button>
             <button onClick={() => setModal('settings')} className={`px-3 py-1.5 rounded-lg text-[11px] font-medium transition-all ${prov?.apiKey ? 'bg-white border border-[#e0d8c8] text-gray-600 hover:bg-gray-50' : 'bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow shadow-amber-600/20'}`}>
               {prov?.apiKey ? 'Model Settings' : 'Add API Key'}
