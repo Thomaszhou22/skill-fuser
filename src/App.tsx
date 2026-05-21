@@ -175,24 +175,26 @@ ${s.content}
           `You are a Skill Classifier. For each skill, determine its primary category.
 Categories: framework (Framework Best Practices), reasoning (Reasoning & Thinking), debugging (Debugging & Error Recovery), quality (Code Quality & Security), devops (DevOps & Deployment), design (UI & Design), workflow (Workflow & Process), other.
 Output ONLY valid JSON array: [{"name":"...","category":"..."}]. No explanation, no markdown fences.`,
-          `Classify these ${vs.length} skills:\n\n${md}`,
+          `Classify these ${vs.length} skills. Return EXACTLY ${vs.length} items in JSON array, same order as input:\n\n${md}`,
           2000
         )
         let classifications: { name: string; category: SkillCategory }[]
         try {
-          const cleaned = classifyResult.replace(/```json\n?/g, '').replace(/```/g, '').trim()
-          classifications = JSON.parse(cleaned)
+          const cleaned = classifyResult.replace(/```json\n?/g, '').replace(/```/g, '').replace(/^\[/, '[').trim()
+          const parsed = JSON.parse(cleaned)
+          if (!Array.isArray(parsed) || parsed.length !== vs.length) throw new Error('length mismatch')
+          classifications = parsed
         } catch {
           // Fallback: assign all to 'other'
           classifications = vs.map(s => ({ name: s.name || 'unnamed', category: 'other' as SkillCategory }))
         }
 
-        // Build groups
+        // Build groups - match by index to ensure alignment
         const groupMap = new Map<SkillCategory, { name: string; content: string }[]>()
-        classifications.forEach((c, i) => {
-          const cat = c.category || 'other'
+        vs.forEach((skill, i) => {
+          const cat = classifications[i]?.category || 'other'
           if (!groupMap.has(cat)) groupMap.set(cat, [])
-          groupMap.get(cat)!.push({ name: vs[i]?.name || c.name || 'unnamed', content: vs[i]?.content || '' })
+          groupMap.get(cat)!.push({ name: skill.name || 'unnamed', content: skill.content })
         })
 
         const groups: FusionGroup[] = Array.from(groupMap.entries()).map(([cat, items]) => ({
