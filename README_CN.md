@@ -5,7 +5,7 @@
 [English](./README.md) | [中文](#中文)
 
 [![GitHub stars](https://img.shields.io/github/stars/Thomaszhou22/markdown-fuser?style=social)](https://github.com/Thomaszhou22/markdown-fuser/stargazers)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Deploy with Vercel](https://img.shields.io/badge/Vercel-indigo?style=flat&logo=vercel)](https://markdown-fuser.vercel.app)
 
 [在线演示](https://markdown-fuser.vercel.app) | [GitHub](https://github.com/Thomaszhou22/markdown-fuser) | [研究背景](#研究背景)
@@ -119,4 +119,17 @@ React 19 + TypeScript + Tailwind CSS v4 + Vite 6 + Vercel
 
 ## 许可证
 
-MIT
+本项目基于 [MIT 许可证](LICENSE) 开源。
+
+简单来说：你可以自由使用、修改和分发本项目，包括商业用途，无需公开源代码。
+
+你可以：
+- ✅ 个人使用、学习和研究
+- ✅ 修改和适配用于任何目的
+- ✅ 用于商业产品和服务
+- ✅ 分发和再授权
+
+你必须：
+- 📝 保留原始版权声明和许可证文本
+
+核心原则：随便用，保留许可证就行。
