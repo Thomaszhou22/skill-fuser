@@ -1021,7 +1021,7 @@ Output ONLY valid JSON array: [{"name":"...","category":"..."}]. No explanation,
                         {p.id === 'custom' && <input value={p.customEndpoint || ''} onChange={e => setProv(p.id, { customEndpoint: e.target.value })} placeholder="https://api.example.com/v1/chat/completions" className="w-full bg-[#f5f0e8] border border-[#e0d8c8] rounded-md px-2.5 py-1.5 text-xs focus:outline-none focus:border-amber-500/50" />}
                         {p.models.length > 0 && (
                           <div className="flex flex-wrap gap-1">
-                            {p.models.map(m => <button key={m} onClick={() => { setModel(m); setProvId(p.id) }} className={`text-[10px] px-2 py-0.5 rounded transition ${provId === p.id && model === m ? 'bg-amber-500 text-white' : 'bg-[#f5f0e8] text-gray-500 hover:bg-gray-200'}`}>{m}</button>)}
+                            {p.models.map(m => <button key={m} onClick={() => { if (provId === p.id && model === m) { setModel('') } else { setModel(m); setProvId(p.id) } }} className={`text-[10px] px-2 py-0.5 rounded transition ${provId === p.id && model === m ? 'bg-amber-500 text-white' : 'bg-[#f5f0e8] text-gray-500 hover:bg-gray-200'}`}>{m}</button>)}
                           </div>
                         )}
                         <button onClick={() => selectProv(p.id)} className={`w-full py-1.5 rounded-md text-[11px] font-medium transition-all ${provId === p.id && p.enabled ? 'bg-green-100 text-green-700' : 'bg-amber-500 text-white hover:bg-amber-600'}`}>
