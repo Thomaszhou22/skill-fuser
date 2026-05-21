@@ -190,12 +190,21 @@ Output ONLY valid JSON array: [{"name":"...","category":"..."}]. No explanation,
         }
 
         // Build groups - match by index to ensure alignment
+        const unknownCats = new Set<string>()
         const groupMap = new Map<SkillCategory, { name: string; content: string }[]>()
         vs.forEach((skill, i) => {
-          const cat = classifications[i]?.category || 'other'
+          let cat = classifications[i]?.category || 'other'
+          if (!(cat in CATEGORIES)) {
+            unknownCats.add(cat)
+            cat = 'other'
+          }
           if (!groupMap.has(cat)) groupMap.set(cat, [])
           groupMap.get(cat)!.push({ name: skill.name || 'unnamed', content: skill.content })
         })
+
+        if (unknownCats.size > 0) {
+          setError(`Unknown skill type(s) detected: ${[...unknownCats].join(', ')}. These skills have been set to "Other" and kept separate. We apologize for the inconvenience — more skill types will be supported soon.`)
+        }
 
         const groups: FusionGroup[] = Array.from(groupMap.entries()).map(([cat, items]) => ({
           category: cat, label: CATEGORIES[cat]?.label || 'Other', canMerge: CATEGORIES[cat]?.canMerge && items.length > 1, items
