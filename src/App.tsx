@@ -134,7 +134,7 @@ Output: # Title > description\n## Mandatory Rules\n## Workflows\n## Quick Refere
       <nav className="sticky top-0 z-40 bg-[#f5f0e8]/80 backdrop-blur-xl border-b border-[#e0d8c8]">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500 via-violet-500 to-purple-600 flex items-center justify-center text-sm shadow-lg shadow-violet-500/20">🔀</div>
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-700 via-amber-800 to-yellow-900 flex items-center justify-center text-sm shadow-lg shadow-amber-800/20">🔀</div>
             <div>
               <span className="font-bold text-sm">Markdown Fuser</span>
               <span className="hidden sm:inline text-gray-400 text-xs ml-2">Skill 文件合并压缩工具</span>
@@ -148,7 +148,7 @@ Output: # Title > description\n## Mandatory Rules\n## Workflows\n## Quick Refere
                 <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
               </div>
             )}
-            <button onClick={() => setShowSettings(true)} className={`text-xs px-4 py-2 rounded-full font-medium transition-all ${prov?.apiKey ? 'bg-white/[0.06] hover:bg-white/[0.1] text-gray-400 border border-[#e0d8c8]' : 'bg-gradient-to-r from-blue-600 to-violet-600 text-white shadow-lg shadow-violet-500/20 hover:shadow-violet-500/30'}`}>
+            <button onClick={() => setShowSettings(true)} className={`text-xs px-4 py-2 rounded-full font-medium transition-all ${prov?.apiKey ? 'bg-white/[0.06] hover:bg-white/[0.1] text-gray-400 border border-[#e0d8c8]' : 'bg-gradient-to-r from-amber-700 to-amber-800 text-white shadow-lg shadow-amber-800/20 hover:shadow-amber-800/30'}`}>
               {prov?.apiKey ? '⚙️ 模型设置' : '🚀 开始配置'}
             </button>
           </div>
@@ -157,7 +157,7 @@ Output: # Title > description\n## Mandatory Rules\n## Workflows\n## Quick Refere
 
       {/* ═══ HERO ═══ */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-blue-600/[0.07] via-violet-600/[0.05] to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-amber-700/[0.05] via-amber-800/[0.03] to-transparent pointer-events-none" />
         <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-gradient-to-r from-blue-500/10 to-violet-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="relative max-w-6xl mx-auto px-6 pt-16 pb-12 text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/90 border border-[#e0d8c8] text-xs text-gray-400 mb-6">
@@ -198,7 +198,7 @@ Output: # Title > description\n## Mandatory Rules\n## Workflows\n## Quick Refere
         {/* Controls */}
         <div className="flex flex-wrap items-center gap-3 mb-4">
           <div className="flex rounded-xl overflow-hidden bg-white/90 border border-[#e0d8c8] p-0.5">
-            <button onClick={() => setMode('fusion')} className={`px-4 py-2 rounded-lg text-xs font-medium transition-all ${mode === 'fusion' ? 'bg-gradient-to-r from-blue-600 to-violet-600 text-white shadow-lg shadow-violet-500/20' : 'text-gray-500 hover:text-gray-700'}`}>🔀 合并压缩</button>
+            <button onClick={() => setMode('fusion')} className={`px-4 py-2 rounded-lg text-xs font-medium transition-all ${mode === 'fusion' ? 'bg-gradient-to-r from-amber-700 to-amber-800 text-white shadow-lg shadow-amber-800/20' : 'text-gray-500 hover:text-gray-700'}`}>🔀 合并压缩</button>
             <button onClick={() => setMode('analysis')} className={`px-4 py-2 rounded-lg text-xs font-medium transition-all ${mode === 'analysis' ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-lg shadow-orange-500/20' : 'text-gray-500 hover:text-gray-700'}`}>🔬 内容分析</button>
           </div>
           {mode === 'fusion' && (
@@ -259,7 +259,7 @@ Output: # Title > description\n## Mandatory Rules\n## Workflows\n## Quick Refere
               <button onClick={fuse} disabled={loading || !prov?.apiKey} className={`w-full py-2.5 rounded-xl text-xs font-semibold transition-all disabled:opacity-30 disabled:cursor-not-allowed ${
                 mode === 'analysis'
                   ? 'bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white shadow-lg shadow-orange-500/20'
-                  : 'bg-gradient-to-r from-blue-600 via-violet-600 to-purple-600 hover:from-blue-500 hover:via-violet-500 hover:to-purple-500 text-white shadow-lg shadow-violet-500/20'
+                  : 'bg-gradient-to-r from-amber-700 via-amber-800 to-yellow-900 hover:from-blue-500 hover:via-violet-500 hover:to-purple-500 text-white shadow-lg shadow-amber-800/20'
               }`}>
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">
@@ -321,7 +321,7 @@ Output: # Title > description\n## Mandatory Rules\n## Workflows\n## Quick Refere
               { step: '4', icon: '✅', title: '获取结果', desc: '下载或复制压缩后的最优 Skill' },
             ].map(s => (
               <div key={s.step} className="relative rounded-xl bg-white border border-[#e0d8c8] p-4 text-center hover:bg-white/90 hover:border-[#c8b898] transition group">
-                <div className="absolute -top-2 -left-2 w-6 h-6 rounded-full bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center text-[10px] font-bold shadow-lg shadow-violet-500/20">{s.step}</div>
+                <div className="absolute -top-2 -left-2 w-6 h-6 rounded-full bg-gradient-to-br from-amber-700 to-amber-800 flex items-center justify-center text-[10px] font-bold shadow-lg shadow-amber-800/20">{s.step}</div>
                 <div className="text-2xl mb-2 mt-1">{s.icon}</div>
                 <div className="text-xs font-medium mb-1">{s.title}</div>
                 <div className="text-[10px] text-gray-400 leading-relaxed">{s.desc}</div>
@@ -372,11 +372,11 @@ Output: # Title > description\n## Mandatory Rules\n## Workflows\n## Quick Refere
                   {p.id === 'custom' && <input value={p.customEndpoint || ''} onChange={e => setProv(p.id, { customEndpoint: e.target.value })} placeholder="https://api.example.com/v1/chat/completions" className="w-full bg-[#f5f0e8] border border-[#e0d8c8] rounded-lg px-3 py-2 text-xs mb-2 focus:outline-none focus:border-violet-500/50 transition" />}
                   {p.models.length > 0 && (
                     <div className="flex flex-wrap gap-1.5 mb-2">
-                      {p.models.map(m => <button key={m} onClick={() => { setModel(m); setProvId(p.id) }} className={`text-[10px] px-2.5 py-1 rounded-lg transition ${provId === p.id && model === m ? 'bg-violet-600 text-white shadow shadow-violet-500/20' : 'bg-white/90 text-gray-500 hover:bg-white/[0.08]'}`}>{m}</button>)}
+                      {p.models.map(m => <button key={m} onClick={() => { setModel(m); setProvId(p.id) }} className={`text-[10px] px-2.5 py-1 rounded-lg transition ${provId === p.id && model === m ? 'bg-violet-600 text-white shadow shadow-amber-800/20' : 'bg-white/90 text-gray-500 hover:bg-white/[0.08]'}`}>{m}</button>)}
                     </div>
                   )}
                   {p.apiKey && (
-                    <button onClick={() => selectProv(p.id)} className={`w-full py-2 rounded-lg text-xs font-medium transition-all ${provId === p.id ? 'bg-gradient-to-r from-blue-600 to-violet-600 text-white shadow shadow-violet-500/20' : 'bg-white/[0.06] text-gray-400 hover:bg-white/[0.1]'}`}>
+                    <button onClick={() => selectProv(p.id)} className={`w-full py-2 rounded-lg text-xs font-medium transition-all ${provId === p.id ? 'bg-gradient-to-r from-amber-700 to-amber-800 text-white shadow shadow-amber-800/20' : 'bg-white/[0.06] text-gray-400 hover:bg-white/[0.1]'}`}>
                       {provId === p.id ? '✓ 当前使用' : '启用此模型'}
                     </button>
                   )}
