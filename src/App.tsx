@@ -150,41 +150,303 @@ const DEMO_CLASSIFICATIONS: { name: string; category: SkillCategory }[] = [
 
 const DEMO_MERGED_BY_RATIO: Record<number, Record<string, string>> = {
   50: {
-    'web-frontend': `# Merged Web Development Guide\n\n## Component Patterns\n- Use functional components with TypeScript\n- Keep components under 200 lines\n- Use custom hooks for complex logic\n- Props interface must be exported\n\n## Styling Conventions (Tailwind)\n- Mobile-first responsive: base → sm → md → lg\n- Max-width containers: max-w-6xl mx-auto\n- Use amber palette for primary, gray-50/100 for bg\n- Never use arbitrary colors — extend tailwind config\n- Consistent spacing: p-4, gap-4 as base units\n\n## State Management\n- Use useState for local state\n- Use useReducer for complex state\n- Use Context for cross-component state\n- Never store derived state\n\n## TypeScript Strict Mode\n- Enable strict mode in tsconfig\n- No implicit any — explicit types always\n- Use interfaces for objects, types for unions\n- Use optional chaining (?.) and nullish coalescing (??)\n\n## Performance\n- Memoize expensive computations with useMemo\n- Use React.memo for pure components\n- Lazy load routes with React.lazy`,
-    'security': `# Security Guide\n\n- bcrypt >= 12, sessions expire 24h\n- HTTPS everywhere\n- Validate all inputs server-side\n- Sanitize HTML, parameterized queries\n- Rate limit 100/min, CORS explicit origins\n- API keys in headers only`,
-    'git-github': `# Git/GitHub Guide\n\n- feat/ | fix/ branches, delete after merge\n- Conventional commits: feat: | fix: | docs: | refactor:\n- Max 72 char subject, body explains WHY\n- 1 approval before merge, squash merge\n- PR: test plan + linked issues`,
-    'coding-agents': `# Coding Agent Guide\n\n## Code Review Standards\n- Review checklist: logic, errors, perf, security, tests\n- Respond within 24h, be constructive\n- Blocking: security vulns, missing errors, perf regression\n\n## Debugging Protocol\n- Reproduce → Isolate → Fix → Verify\n- Write reproduction test, minimal fix`,
-    'devops-cloud': `# DevOps Guide\n\n- Vite build → dist/, Node 18.x\n- VITE_ prefix for client vars\n- SPA: /* → index.html\n- HTTPS auto, redirect www → apex`,
+    'web-frontend': `# Web Dev
+
+- Functional components + TS, <200 lines, custom hooks
+- Props interface exported
+- Tailwind: mobile-first, amber palette, extend config
+- State: useState → useReducer → Context
+- TS strict, no implicit any, optional chaining
+- useMemo, React.memo, React.lazy`,
+    'security': `# Security
+
+- bcrypt >= 12, HTTPS only
+- Validate all inputs, sanitize HTML
+- Rate limit 100/min`,
+    'git-github': `# Git
+
+- feat/fix branches, squash merge
+- Conventional commits, 72 char`,
+    'coding-agents': `# Agent
+
+- Review 24h, constructive
+- Debug: Reproduce → Isolate → Fix`,
+    'devops-cloud': `# DevOps
+
+- Vite build → dist/, VITE_ prefix
+- SPA fallback /* → index.html`,
   },
   60: {
-    'web-frontend': `# Merged Web Development Guide\n\n## Component Patterns\n- Use functional components with TypeScript\n- Keep components under 200 lines\n- Use custom hooks for complex logic\n- Props interface must be exported\n\n## Styling Conventions (Tailwind)\n- Mobile-first responsive: base → sm → md → lg\n- Max-width containers: max-w-6xl mx-auto\n- Use amber palette for primary, gray-50/100 for bg\n- Never use arbitrary colors — extend tailwind config\n- Consistent spacing: p-4, gap-4 as base units\n\n## State Management\n- Use useState for local state\n- Use useReducer for complex state\n- Use Context for cross-component state\n- Never store derived state\n\n## TypeScript Strict Mode\n- Enable strict mode in tsconfig\n- No implicit any — explicit types always\n- Use interfaces for objects, types for unions\n- Use optional chaining (?.) and nullish coalescing (??)\n- Enable strictNullChecks\n\n## Performance\n- Memoize expensive computations with useMemo\n- Use React.memo for pure components\n- Lazy load routes with React.lazy\n- Use transition-all (150ms) for animations`,
-    'security': `# Merged Security Guide\n\n## Authentication\n- Never store passwords in plain text\n- Use bcrypt with salt rounds >= 12\n- Implement rate limiting on login endpoints\n- Session tokens must expire after 24h\n\n## Input Validation\n- Validate ALL user inputs on server side\n- Sanitize HTML to prevent XSS\n- Use parameterized queries to prevent SQL injection\n\n## API Security\n- Use HTTPS everywhere\n- API keys in headers, not URL params\n- CORS with explicit origins\n- Rate limit: 100 req/min per user`,
-    'git-github': `# Merged Git/GitHub Guide\n\n## Branching Strategy\n- main is always deployable\n- Feature: feat/description | Fix: fix/description\n- Delete branches after merge\n\n## Commit Conventions\n- Conventional commits: feat: | fix: | docs: | refactor:\n- Max 72 char subject, body explains WHY\n\n## PR & Review Flow\n- Require 1 approval before merge\n- Squash merge to main`,
-    'coding-agents': `# Merged Coding Agent Guide\n\n## Code Review Standards\n- Review checklist: logic, errors, performance, security, tests\n- Respond within 24h, be constructive\n- Blocking: security vulns, missing errors\n\n## Debugging Protocol\n1. Reproduce — document steps, environment\n2. Isolate — binary search, console.log\n3. Fix & Verify — reproduction test, minimal fix`,
-    'devops-cloud': `# Merged DevOps Guide\n\n## Vercel Deployment\n- Framework: Vite, Build: npm run build, Output: dist\n- Node 18.x, VITE_ prefix for client vars\n- vercel.json for rewrites, SPA fallback`,
+    'web-frontend': `# Web Development
+
+## Components
+- Functional + TS, <200 lines, custom hooks
+- Props interface exported
+
+## Styling
+- Tailwind mobile-first, amber palette, extend config
+- Consistent spacing p-4, gap-4
+
+## State & Types
+- useState → useReducer → Context
+- Strict mode, no implicit any
+
+## Performance
+- useMemo, React.memo, React.lazy`,
+    'security': `# Security
+
+- bcrypt >= 12, HTTPS everywhere
+- Validate all inputs, sanitize HTML, parameterized queries
+- Rate limit 100/min, CORS explicit origins`,
+    'git-github': `# Git/GitHub
+
+- feat/fix branches, delete after merge
+- Conventional commits, 72 char subject
+- 1 approval, squash merge`,
+    'coding-agents': `# Coding Agent
+
+## Review
+- Checklist: logic, errors, perf, security
+- 24h response, constructive
+
+## Debug
+- Reproduce → Isolate → Fix → Verify`,
+    'devops-cloud': `# DevOps
+
+- Vite build → dist/, Node 18
+- VITE_ prefix for client vars
+- SPA fallback /* → index.html`,
   },
   70: {
-    'web-frontend': `# Merged Web Development Guide\n\n## Component Patterns\n- Use functional components with TypeScript\n- Keep components under 200 lines\n- Use custom hooks for complex logic\n- Props interface must be exported\n\n## Styling Conventions (Tailwind)\n- Mobile-first responsive: base → sm → md → lg\n- Max-width containers: max-w-6xl mx-auto\n- Use amber palette for primary, gray-50/100 for bg\n- Never use arbitrary colors — extend tailwind config\n- Consistent spacing: p-4, gap-4 as base units\n\n## State Management\n- Use useState for local state\n- Use useReducer for complex state\n- Use Context for cross-component state\n- Never store derived state\n\n## TypeScript Strict Mode\n- Enable strict mode in tsconfig\n- No implicit any — explicit types always\n- Use interfaces for objects, types for unions\n- Use optional chaining (?.) and nullish coalescing (??)\n- Enable strictNullChecks\n\n## Performance\n- Memoize expensive computations with useMemo\n- Use React.memo for pure components\n- Lazy load routes with React.lazy\n- Use transition-all (150ms) for animations\n\n## Quick Reference\n| Topic | Key Rule |\n|-------|----------|\n| Components | Functional + TypeScript, < 200 lines |\n| Styling | Tailwind, mobile-first, no arbitrary colors |\n| State | useState → useReducer → Context |\n| Types | Strict mode, no implicit any |`,
-    'security': `# Merged Security Guide\n\n## Authentication\n- Never store passwords in plain text\n- Use bcrypt with salt rounds >= 12\n- Implement rate limiting on login endpoints\n- Session tokens must expire after 24h\n\n## Input Validation\n- Validate ALL user inputs on server side\n- Sanitize HTML to prevent XSS\n- Use parameterized queries to prevent SQL injection\n- Maximum input length: 10,000 chars\n\n## API Security\n- Use HTTPS everywhere\n- API keys must be in headers, not URL params\n- Implement CORS with explicit origins\n- Rate limit: 100 req/min per user`,
-    'git-github': `# Merged Git/GitHub Guide\n\n## Branching Strategy\n- main is always deployable\n- Feature: feat/description | Fix: fix/description\n- Delete branches after merge\n\n## Commit Conventions\n- Conventional commits: feat: | fix: | docs: | refactor:\n- Max 72 char subject, body explains WHY\n- One logical change per commit\n\n## PR & Review Flow\n- Require 1 approval before merge\n- Squash merge to main`,
-    'coding-agents': `# Merged Coding Agent Guide\n\n## Code Review Standards\n- Review checklist: logic, errors, performance, security, tests\n- Respond within 24h, be constructive\n- Blocking: security vulns, missing errors, perf regression\n- Non-blocking: style issues\n\n## Debugging Protocol\n1. Reproduce — document exact steps, environment\n2. Isolate — binary search, console.log, network tab\n3. Fix & Verify — write reproduction test, minimal fix`,
-    'devops-cloud': `# Merged DevOps Guide\n\n## Vercel Deployment\n- Framework: Vite, Build: npm run build, Output: dist\n- Node 18.x, VITE_ prefix for client vars\n- vercel.json for rewrites, SPA fallback /* → /index.html\n- Redirect www → apex, HTTPS auto-enabled`,
+    'web-frontend': `# Web Development Guide
+
+## Component Patterns
+- Functional components with TypeScript
+- Under 200 lines, custom hooks for logic
+- Props interface exported
+
+## Styling (Tailwind)
+- Mobile-first: base → sm → md → lg
+- Amber primary, no arbitrary colors
+- Extend config, consistent spacing
+
+## State Management
+- useState → useReducer → Context
+- Never store derived state
+
+## TypeScript
+- Strict mode, no implicit any
+- Interfaces for objects, types for unions
+- Optional chaining, nullish coalescing
+
+## Performance
+- useMemo, React.memo, React.lazy`,
+    'security': `# Security Guide
+
+- bcrypt >= 12 salt rounds
+- HTTPS everywhere, validate all inputs
+- Sanitize HTML, parameterized queries
+- Rate limit 100/min, CORS explicit origins
+- Session tokens expire 24h`,
+    'git-github': `# Git/GitHub
+
+- feat/ | fix/ branches, delete after merge
+- Conventional commits, 72 char subject
+- 1 approval before merge, squash merge
+- PR: test plan + linked issues`,
+    'coding-agents': `# Coding Agent
+
+## Code Review
+- Checklist: logic, errors, perf, security, tests
+- 24h response, be constructive
+- Blocking: security, missing errors
+
+## Debugging
+- Reproduce → Isolate → Fix → Verify
+- Write reproduction test`,
+    'devops-cloud': `# DevOps
+
+- Vite build → dist/, Node 18.x
+- VITE_ prefix for client vars
+- SPA: /* → index.html
+- HTTPS auto-enabled`,
   },
   80: {
-    'web-frontend': `# Merged Web Development Guide\n\n## Component Patterns\n- Use functional components with TypeScript\n- Keep components under 200 lines\n- Use custom hooks for complex logic\n- Props interface must be exported\n\n## Styling Conventions (Tailwind)\n- Mobile-first responsive: base → sm → md → lg\n- Max-width containers: max-w-6xl mx-auto\n- Use amber palette for primary, gray-50/100 for bg\n- Never use arbitrary colors — extend tailwind config\n- Consistent spacing: p-4, gap-4 as base units\n\n## State Management\n- Use useState for local state\n- Use useReducer for complex state\n- Use Context for cross-component state\n- Never store derived state\n\n## TypeScript Strict Mode\n- Enable strict mode in tsconfig\n- No implicit any — explicit types always\n- Use interfaces for objects, types for unions\n- Use optional chaining (?.) and nullish coalescing (??)\n- Enable strictNullChecks\n\n## Performance\n- Memoize expensive computations with useMemo\n- Use React.memo for pure components\n- Lazy load routes with React.lazy\n- Use transition-all (150ms) for animations\n\n## Quick Reference\n| Topic | Key Rule |\n|-------|----------|\n| Components | Functional + TypeScript, < 200 lines |\n| Styling | Tailwind, mobile-first, no arbitrary colors |\n| State | useState → useReducer → Context |\n| Types | Strict mode, no implicit any |`,
-    'security': `# Merged Security Guide\n\n## Authentication\n- Never store passwords in plain text\n- Use bcrypt with salt rounds >= 12\n- Implement rate limiting on login endpoints\n- Session tokens must expire after 24h\n\n## Input Validation\n- Validate ALL user inputs on server side\n- Sanitize HTML to prevent XSS\n- Use parameterized queries to prevent SQL injection\n- Maximum input length: 10,000 chars\n\n## API Security\n- Use HTTPS everywhere\n- API keys must be in headers, not URL params\n- Implement CORS with explicit origins\n- Rate limit: 100 req/min per user\n\n## Quick Reference\n- bcrypt >= 12 salt rounds\n- HTTPS everywhere\n- Validate all inputs server-side\n- Rate limit: 100 req/min`,
-    'git-github': `# Merged Git/GitHub Guide\n\n## Branching Strategy\n- main is always deployable\n- Feature: feat/description | Fix: fix/description\n- Delete branches after merge\n\n## Commit Conventions\n- Conventional commits: feat: | fix: | docs: | refactor:\n- Max 72 char subject, body explains WHY\n- One logical change per commit\n\n## PR & Review Flow\n- Require 1 approval before merge\n- Squash merge to main\n- PR must include test plan + linked issues\n\n## Quick Reference\n- feat/ | fix/ branches → squash merge to main\n- Conventional commits, 72 char limit`,
-    'coding-agents': `# Merged Coding Agent Guide\n\n## Code Review Standards\n- Review checklist: logic, errors, performance, security, tests\n- Respond within 24h, be constructive\n- Blocking: security vulns, missing errors, perf regression\n- Non-blocking: style issues\n\n## Debugging Protocol\n1. Reproduce — document exact steps, environment\n2. Isolate — binary search, console.log, network tab\n3. Fix & Verify — write reproduction test, minimal fix, full suite\n\n## Quick Reference\n- Review: 24h response, constructive tone\n- Debug: Reproduce → Isolate → Fix → Verify`,
-    'devops-cloud': `# Merged DevOps Guide\n\n## Vercel Deployment\n- Framework: Vite, Build: npm run build, Output: dist\n- Node 18.x, VITE_ prefix for client vars\n- vercel.json for rewrites, SPA fallback /* → /index.html\n- Redirect www → apex, HTTPS auto-enabled\n\n## Quick Reference\n- Build: npm run build → dist/\n- Env: VITE_ prefix for client\n- SPA: /* → index.html`,
+    'web-frontend': `# Web Development Guide
+
+## Component Patterns
+- Functional components with TypeScript
+- Keep under 200 lines, custom hooks for logic
+- Props interface must be exported
+
+## Styling Conventions (Tailwind)
+- Mobile-first responsive: base → sm → md → lg
+- Max-width containers: max-w-6xl mx-auto
+- Amber palette for primary, gray-50/100 for bg
+- Never arbitrary colors, extend config
+- Consistent spacing: p-4, gap-4
+
+## State Management
+- useState for local, useReducer for complex
+- Context for cross-component
+- Never store derived state
+
+## TypeScript Strict Mode
+- Enable strict in tsconfig
+- No implicit any, explicit types always
+- Interfaces for objects, types for unions
+- Optional chaining, nullish coalescing
+
+## Performance
+- useMemo, React.memo, React.lazy`,
+    'security': `# Security Guide
+
+- bcrypt >= 12, sessions expire 24h
+- HTTPS everywhere
+- Validate all inputs server-side
+- Sanitize HTML, parameterized queries
+- Rate limit 100/min, CORS explicit origins`,
+    'git-github': `# Git/GitHub Guide
+
+- feat/ | fix/ branches, delete after merge
+- Conventional commits, 72 char subject
+- 1 approval before merge, squash merge
+- PR: test plan + linked issues`,
+    'coding-agents': `# Coding Agent Guide
+
+## Code Review
+- Checklist: logic, errors, perf, security, tests
+- 24h response, constructive
+- Blocking: security vulns, missing errors
+
+## Debugging
+- Reproduce → Isolate → Fix → Verify
+- Write reproduction test, minimal fix`,
+    'devops-cloud': `# DevOps Guide
+
+- Vite build → dist/, Node 18.x
+- VITE_ prefix for client vars
+- SPA: /* → index.html
+- HTTPS auto-enabled`,
   },
   90: {
-    'web-frontend': `# Merged Web Development Guide\n\n## Component Patterns\n- Use functional components with TypeScript\n- Keep components under 200 lines\n- Use custom hooks for complex logic\n- Props interface must be exported\n\n## Styling Conventions (Tailwind)\n- Mobile-first responsive: base → sm → md → lg\n- Max-width containers: max-w-6xl mx-auto\n- Use amber palette for primary, gray-50/100 for bg\n- Never use arbitrary colors — extend tailwind config\n- Consistent spacing: p-4, gap-4 as base units\n\n## State Management\n- Use useState for local state\n- Use useReducer for complex state\n- Use Context for cross-component state\n- Never store derived state\n\n## TypeScript Strict Mode\n- Enable strict mode in tsconfig\n- No implicit any — explicit types always\n- Use interfaces for objects, types for unions\n- Use optional chaining (?.) and nullish coalescing (??)\n- Enable strictNullChecks\n\n## Performance\n- Memoize expensive computations with useMemo\n- Use React.memo for pure components\n- Lazy load routes with React.lazy\n- Use transition-all (150ms) for animations\n\n## Quick Reference\n| Topic | Key Rule |\n|-------|----------|\n| Components | Functional + TypeScript, < 200 lines |\n| Styling | Tailwind, mobile-first, no arbitrary colors |\n| State | useState → useReducer → Context |\n| Types | Strict mode, no implicit any |`,
-    'security': `# Merged Security Guide\n\n## Authentication\n- Never store passwords in plain text\n- Use bcrypt with salt rounds >= 12\n- Implement rate limiting on login endpoints\n- Session tokens must expire after 24h\n\n## Input Validation\n- Validate ALL user inputs on server side\n- Sanitize HTML to prevent XSS\n- Use parameterized queries to prevent SQL injection\n- Maximum input length: 10,000 chars\n\n## API Security\n- Use HTTPS everywhere\n- API keys must be in headers, not URL params\n- Implement CORS with explicit origins\n- Rate limit: 100 req/min per user\n\n## Quick Reference\n- bcrypt >= 12 salt rounds\n- HTTPS everywhere\n- Validate all inputs server-side\n- Rate limit: 100 req/min`,
-    'git-github': `# Merged Git/GitHub Guide\n\n## Branching Strategy\n- main is always deployable\n- Feature: feat/description | Fix: fix/description\n- Delete branches after merge\n\n## Commit Conventions\n- Conventional commits: feat: | fix: | docs: | refactor:\n- Max 72 char subject, body explains WHY\n- One logical change per commit\n\n## PR & Review Flow\n- Require 1 approval before merge\n- Squash merge to main\n- PR must include test plan + linked issues\n\n## Quick Reference\n- feat/ | fix/ branches → squash merge to main\n- Conventional commits, 72 char limit`,
-    'coding-agents': `# Merged Coding Agent Guide\n\n## Code Review Standards\n- Review checklist: logic, errors, performance, security, tests\n- Respond within 24h, be constructive\n- Blocking: security vulns, missing errors, perf regression\n- Non-blocking: style issues\n\n## Debugging Protocol\n1. Reproduce — document exact steps, environment\n2. Isolate — binary search, console.log, network tab\n3. Fix & Verify — write reproduction test, minimal fix, full suite\n\n## Quick Reference\n- Review: 24h response, constructive tone\n- Debug: Reproduce → Isolate → Fix → Verify`,
-    'devops-cloud': `# Merged DevOps Guide\n\n## Vercel Deployment\n- Framework: Vite, Build: npm run build, Output: dist\n- Node 18.x, VITE_ prefix for client vars\n- vercel.json for rewrites, SPA fallback /* → /index.html\n- Redirect www → apex, HTTPS auto-enabled\n\n## Quick Reference\n- Build: npm run build → dist/\n- Env: VITE_ prefix for client\n- SPA: /* → index.html`,
+    'web-frontend': `# Merged Web Development Guide
+
+## Component Patterns
+- Use functional components with TypeScript
+- Keep components under 200 lines
+- Use custom hooks for complex logic
+- Props interface must be exported
+
+## Styling Conventions (Tailwind)
+- Mobile-first responsive: base → sm → md → lg
+- Max-width containers: max-w-6xl mx-auto
+- Use amber palette for primary, gray-50/100 for bg
+- Never use arbitrary colors — extend tailwind config
+- Consistent spacing: p-4, gap-4 as base units
+
+## State Management
+- Use useState for local state
+- Use useReducer for complex state
+- Use Context for cross-component state
+- Never store derived state
+
+## TypeScript Strict Mode
+- Enable strict mode in tsconfig
+- No implicit any — explicit types always
+- Use interfaces for objects, types for unions
+- Use optional chaining (?.) and nullish coalescing (??)
+- Enable strictNullChecks
+
+## Performance
+- Memoize expensive computations with useMemo
+- Use React.memo for pure components
+- Lazy load routes with React.lazy
+- Use transition-all (150ms) for animations
+
+## Quick Reference
+| Topic | Key Rule |
+|-------|----------|
+| Components | Functional + TypeScript, < 200 lines |
+| Styling | Tailwind, mobile-first, no arbitrary colors |
+| State | useState → useReducer → Context |
+| Types | Strict mode, no implicit any |`,
+    'security': `# Merged Security Guide
+
+## Authentication
+- Never store passwords in plain text
+- Use bcrypt with salt rounds >= 12
+- Implement rate limiting on login endpoints
+- Session tokens must expire after 24h
+
+## Input Validation
+- Validate ALL user inputs on server side
+- Sanitize HTML to prevent XSS
+- Use parameterized queries to prevent SQL injection
+- Maximum input length: 10,000 chars
+
+## API Security
+- Use HTTPS everywhere
+- API keys must be in headers, not URL params
+- Implement CORS with explicit origins
+- Rate limit: 100 req/min per user
+
+## Quick Reference
+- bcrypt >= 12 salt rounds
+- HTTPS everywhere
+- Validate all inputs server-side
+- Rate limit: 100 req/min`,
+    'git-github': `# Merged Git/GitHub Guide
+
+## Branching Strategy
+- main is always deployable
+- Feature: feat/description | Fix: fix/description
+- Delete branches after merge
+
+## Commit Conventions
+- Conventional commits: feat: | fix: | docs: | refactor:
+- Max 72 char subject, body explains WHY
+- One logical change per commit
+
+## PR & Review Flow
+- Require 1 approval before merge
+- Squash merge to main
+- PR must include test plan + linked issues
+
+## Quick Reference
+- feat/ | fix/ branches → squash merge to main
+- Conventional commits, 72 char limit`,
+    'coding-agents': `# Merged Coding Agent Guide
+
+## Code Review Standards
+- Review checklist: logic, errors, performance, security, tests
+- Respond within 24h, be constructive
+- Blocking: security vulns, missing errors, perf regression
+- Non-blocking: style issues
+
+## Debugging Protocol
+1. Reproduce — document exact steps, environment
+2. Isolate — binary search, console.log, network tab
+3. Fix & Verify — write reproduction test, minimal fix, full suite
+
+## Quick Reference
+- Review: 24h response, constructive tone
+- Debug: Reproduce → Isolate → Fix → Verify`,
+    'devops-cloud': `# Merged DevOps Guide
+
+## Vercel Deployment
+- Framework: Vite, Build: npm run build, Output: dist
+- Node 18.x, VITE_ prefix for client vars
+- vercel.json for rewrites, SPA fallback /* → /index.html
+- Redirect www → apex, HTTPS auto-enabled
+
+## Quick Reference
+- Build: npm run build → dist/
+- Env: VITE_ prefix for client
+- SPA: /* → index.html`,
   },
 }
+
 
 const DEMO_MERGED: Record<string, string> = {
   'web-frontend': `# Merged Web Development Guide\n\n## Component Patterns\n- Use functional components with TypeScript\n- Keep components under 200 lines\n- Use custom hooks for complex logic\n- Props interface must be exported\n\n## Styling Conventions (Tailwind)\n- Mobile-first responsive: base → sm → md → lg\n- Max-width containers: max-w-6xl mx-auto\n- Use amber palette for primary, gray-50/100 for bg\n- Never use arbitrary colors — extend tailwind config\n- Consistent spacing: p-4, gap-4 as base units\n\n## State Management\n- Use useState for local state\n- Use useReducer for complex state\n- Use Context for cross-component state\n- Never store derived state\n\n## TypeScript Strict Mode\n- Enable strict mode in tsconfig\n- No implicit any — explicit types always\n- Use interfaces for objects, types for unions\n- Use optional chaining (?.) and nullish coalescing (??)\n- Enable strictNullChecks\n\n## Performance\n- Memoize expensive computations with useMemo\n- Use React.memo for pure components\n- Lazy load routes with React.lazy\n- Use transition-all (150ms) for animations\n\n## Quick Reference\n| Topic | Key Rule |\n|-------|----------|\n| Components | Functional + TypeScript, < 200 lines |\n| Styling | Tailwind, mobile-first, no arbitrary colors |\n| State | useState → useReducer → Context |\n| Types | Strict mode, no implicit any |`,
@@ -416,7 +678,7 @@ Output ONLY valid JSON array: [{"name":"...","category":"..."}]. No explanation,
             const catPrompt = CATEGORIES[g.category]?.mergePrompt || ''
             try {
               const merged = await callLLM(
-                `${catPrompt}\n\nTarget output: <=${Math.floor(budget / groups.filter(gg => gg.canMerge).length)} tokens. Keep safety/error/numbered procedures verbatim. Markdown only.`,
+                `${catPrompt}\n\nSTRICT CONSTRAINT: Total output MUST NOT exceed ${Math.floor(budget / groups.filter(gg => gg.canMerge).length)} tokens. Aggressively deduplicate, remove examples, trim verbose prose. Keep only actionable rules. Markdown only.`,
                 `Merge these ${g.items.length} ${g.category} skills:\n\n${itemMd}`,
                 maxT
               )
