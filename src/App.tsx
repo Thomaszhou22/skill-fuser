@@ -18,7 +18,7 @@ type Modal = 'none' | 'settings' | 'history' | 'favorites' | 'data'
 
 const uid = () => Math.random().toString(36).slice(2, 8)
 const estimateTokens = (t: string) => { const c = (t.match(/[\u4e00-\u9fff\u3040-\u30ff\uac00-\ud7af]/g) || []).length; return Math.ceil(c / 2 + (t.length - c) / 4) }
-const STORAGE_KEY = 'markdown-fuser-'
+const STORAGE_KEY = 'skill-fuser-'
 
 /* ─── Skill Categories & Prompts (based on VoltAgent/awesome-openclaw-skills taxonomy) ─── */
 const CATEGORIES: Record<SkillCategory, { label: string; canMerge: boolean; mergePrompt: string }> = {
@@ -815,7 +815,7 @@ Output ONLY valid JSON array: [{"name":"...","category":"..."}]. No explanation,
   const exportData = () => {
     const data = { providers, history, favorites, settings: { provId, model, ratio } }
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `markdown-fuser-backup-${new Date().toISOString().slice(0, 10)}.json`; a.click()
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `skill-fuser-backup-${new Date().toISOString().slice(0, 10)}.json`; a.click()
   }
   const importData = (files: FileList | null) => {
     if (!files?.[0]) return
@@ -864,11 +864,11 @@ Output ONLY valid JSON array: [{"name":"...","category":"..."}]. No explanation,
             <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-amber-500 via-amber-400 to-yellow-600 flex items-center justify-center shadow shadow-amber-600/20">
               <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" /></svg>
             </div>
-            <span className="font-bold text-sm">Markdown Fuser</span>
+            <span className="font-bold text-sm">Skill Fuser</span>
           </div>
           <div className="flex items-center gap-2">
             {prov && model && <div className="hidden sm:flex items-center gap-1.5 text-[11px] px-2.5 py-1 rounded-full bg-white border border-[#e0d8c8] text-gray-500"><span className="w-1.5 h-1.5 rounded-full bg-green-500" />{model}</div>}
-            <a href="https://github.com/Thomaszhou22/markdown-fuser" target="_blank" rel="noopener noreferrer" className="px-2.5 py-1.5 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-white border border-transparent hover:border-[#e0d8c8] transition" title="GitHub Repository"><svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg></a>
+            <a href="https://github.com/Thomaszhou22/skill-fuser" target="_blank" rel="noopener noreferrer" className="px-2.5 py-1.5 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-white border border-transparent hover:border-[#e0d8c8] transition" title="GitHub Repository"><svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg></a>
             <button onClick={() => setModal('favorites')} className="px-2.5 py-1.5 rounded-lg text-[11px] text-gray-500 hover:text-gray-700 hover:bg-white border border-transparent hover:border-[#e0d8c8] transition">Favorites</button>
             <button onClick={() => setModal('history')} className="px-2.5 py-1.5 rounded-lg text-[11px] text-gray-500 hover:text-gray-700 hover:bg-white border border-transparent hover:border-[#e0d8c8] transition">History</button>
             <button onClick={() => setModal('data')} className="px-2.5 py-1.5 rounded-lg text-[11px] text-gray-500 hover:text-gray-700 hover:bg-white border border-transparent hover:border-[#e0d8c8] transition">Data</button>
@@ -1087,7 +1087,7 @@ Output ONLY valid JSON array: [{"name":"...","category":"..."}]. No explanation,
           <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white border border-[#e0d8c8] text-[10px] text-gray-400">
             <span>Inspired by <em>SkillReducer</em></span>
             <span className="text-gray-300">|</span>
-            <a href="https://github.com/Thomaszhou22/markdown-fuser" target="_blank" className="text-gray-500 hover:text-amber-600 underline">GitHub</a>
+            <a href="https://github.com/Thomaszhou22/skill-fuser" target="_blank" className="text-gray-500 hover:text-amber-600 underline">GitHub</a>
             <span className="text-gray-300">|</span>
             <span>All data stays in your browser</span>
           </div>

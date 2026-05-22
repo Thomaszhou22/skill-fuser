@@ -1,14 +1,14 @@
-# Markdown Fuser
+# Skill Fuser
 
 <div align="center">
 
 [English](./README.md) | [中文](#中文)
 
-[![GitHub stars](https://img.shields.io/github/stars/Thomaszhou22/markdown-fuser?style=social)](https://github.com/Thomaszhou22/markdown-fuser/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/Thomaszhou22/skill-fuser?style=social)](https://github.com/Thomaszhou22/skill-fuser/stargazers)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](LICENSE)
-[![Deploy with Vercel](https://img.shields.io/badge/Vercel-indigo?style=flat&logo=vercel)](https://markdown-fuser.vercel.app)
+[![Deploy with Vercel](https://img.shields.io/badge/Vercel-indigo?style=flat&logo=vercel)](https://skill-fuser.vercel.app)
 
-[在线演示](https://markdown-fuser.vercel.app) | [GitHub](https://github.com/Thomaszhou22/markdown-fuser) | [研究背景](#研究背景)
+[在线演示](https://skill-fuser.vercel.app) | [GitHub](https://github.com/Thomaszhou22/skill-fuser) | [研究背景](#研究背景)
 
 </div>
 
@@ -18,7 +18,7 @@
 
 ## 项目简介
 
-Markdown Fuser 是一个 AI 驱动的工具，用于将多个 AI Agent 的 SKILL.md 文件合并压缩为优化输出。基于 [SkillReducer](https://arxiv.org/abs/2603.29919) 研究论文——研究发现 Skill 文件中只有 **38.5%** 是可执行的核心规则，删除非核心内容后 Agent 表现反而 **提升 2.8%**。
+Skill Fuser 是一个 AI 驱动的工具，用于将多个 AI Agent 的 SKILL.md 文件合并压缩为优化输出。基于 [SkillReducer](https://arxiv.org/abs/2603.29919) 研究论文——研究发现 Skill 文件中只有 **38.5%** 是可执行的核心规则，删除非核心内容后 Agent 表现反而 **提升 2.8%**。
 
 ## 实机演示
 
@@ -85,7 +85,7 @@ Markdown Fuser 是一个 AI 驱动的工具，用于将多个 AI Agent 的 SKILL
 
 ### 在线使用（推荐）
 
-直接访问 **[https://markdown-fuser.vercel.app](https://markdown-fuser.vercel.app)** — 无需注册。
+直接访问 **[https://skill-fuser.vercel.app](https://skill-fuser.vercel.app)** — 无需注册。
 
 ### 使用步骤
 
@@ -97,11 +97,11 @@ Markdown Fuser 是一个 AI 驱动的工具，用于将多个 AI Agent 的 SKILL
 
 ### 自部署
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Thomaszhou22/markdown-fuser)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Thomaszhou22/skill-fuser)
 
 ```bash
-git clone https://github.com/Thomaszhou22/markdown-fuser.git
-cd markdown-fuser
+git clone https://github.com/Thomaszhou22/skill-fuser.git
+cd skill-fuser
 npm install
 npm run dev    # 开发
 npm run build  # 生产

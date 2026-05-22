@@ -1,14 +1,14 @@
-# Markdown Fuser
+# Skill Fuser
 
 <div align="center">
 
 [English](#english) | [中文](./README_CN.md)
 
-[![GitHub stars](https://img.shields.io/github/stars/Thomaszhou22/markdown-fuser?style=social)](https://github.com/Thomaszhou22/markdown-fuser/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/Thomaszhou22/skill-fuser?style=social)](https://github.com/Thomaszhou22/skill-fuser/stargazers)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](LICENSE)
-[![Deploy with Vercel](https://img.shields.io/badge/Vercel-indigo?style=flat&logo=vercel)](https://markdown-fuser.vercel.app)
+[![Deploy with Vercel](https://img.shields.io/badge/Vercel-indigo?style=flat&logo=vercel)](https://skill-fuser.vercel.app)
 
-[Live Demo](https://markdown-fuser.vercel.app) | [GitHub](https://github.com/Thomaszhou22/markdown-fuser) | [Research](#-research-background)
+[Live Demo](https://skill-fuser.vercel.app) | [GitHub](https://github.com/Thomaszhou22/skill-fuser) | [Research](#-research-background)
 
 </div>
 
@@ -85,7 +85,7 @@ Upload Skills → AI classifies every paragraph by importance (Core Rule / Backg
 
 ### Use Online (Recommended)
 
-Visit: **[https://markdown-fuser.vercel.app](https://markdown-fuser.vercel.app)** — no signup, no install.
+Visit: **[https://skill-fuser.vercel.app](https://skill-fuser.vercel.app)** — no signup, no install.
 
 ### How to Use
 
@@ -97,11 +97,11 @@ Visit: **[https://markdown-fuser.vercel.app](https://markdown-fuser.vercel.app)*
 
 ### Self-Deploy
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Thomaszhou22/markdown-fuser)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Thomaszhou22/skill-fuser)
 
 ```bash
-git clone https://github.com/Thomaszhou22/markdown-fuser.git
-cd markdown-fuser
+git clone https://github.com/Thomaszhou22/skill-fuser.git
+cd skill-fuser
 npm install
 npm run dev    # Development
 npm run build  # Production
