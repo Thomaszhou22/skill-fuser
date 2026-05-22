@@ -22,18 +22,17 @@ Markdown Fuser is an AI-powered tool that merges and compresses multiple AI Agen
 
 ## Screenshots
 
-<table>
-  <tr>
-    <td align="center"><b>Fusion 50%</b></td>
-    <td align="center"><b>Fusion 90%</b></td>
-    <td align="center"><b>Analysis</b></td>
-  </tr>
-  <tr>
-    <td><img src="docs/demo-fusion-50.png" alt="Fusion 50% demo" width="400" /></td>
-    <td><img src="docs/demo-fusion-90.png" alt="Fusion 90% demo" width="400" /></td>
-    <td><img src="docs/demo-analyze.png" alt="Analysis demo" width="400" /></td>
-  </tr>
-</table>
+<p align="center"><b>Fusion 50%</b></p>
+
+<img src="docs/demo-fusion-50.png" alt="Fusion 50% demo" />
+
+<p align="center"><b>Fusion 90%</b></p>
+
+<img src="docs/demo-fusion-90.png" alt="Fusion 90% demo" />
+
+<p align="center"><b>Analysis</b></p>
+
+<img src="docs/demo-analyze.png" alt="Analysis demo" />
 
 ## How It Works
 
