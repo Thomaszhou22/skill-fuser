@@ -491,11 +491,97 @@ export default function App() {
   /* ─── Demo Run ─── */
   const runDemo = useCallback(async () => {
     setLoading(true); setError(''); setResult(''); setFusionGroups([])
-    setMode('fusion')
+    // Keep current mode — don't override
     // Load demo skills
     setSkills(DEMO_SKILLS)
     const vs = DEMO_SKILLS.filter(s => s.content.trim())
 
+    // Analysis mode: generate mock analysis report
+    if (mode === 'analysis') {
+      setPhase('classifying')
+      await new Promise(r => setTimeout(r, 1500))
+      const analysisReport = `# Content Analysis Report
+
+## Skill: react-patterns
+| Section | Classification | Keep? |
+|---------|---------------|-------|
+| Rules | Core Rule | ✅ |
+| State Management | Core Rule | ✅ |
+| Performance | Core Rule | ✅ |
+
+## Skill: tailwind-styling
+| Section | Classification | Keep? |
+|---------|---------------|-------|
+| Layout Rules | Core Rule | ✅ |
+| Color System | Core Rule | ✅ |
+| Animation | Background | ⚠️ |
+
+## Skill: security-checklist
+| Section | Classification | Keep? |
+|---------|---------------|-------|
+| Authentication | Core Rule | ✅ |
+| Input Validation | Core Rule | ✅ |
+| API Security | Core Rule | ✅ |
+
+## Skill: git-workflow
+| Section | Classification | Keep? |
+|---------|---------------|-------|
+| Branching | Core Rule | ✅ |
+| Commits | Core Rule | ✅ |
+| PR Rules | Example | ⚠️ |
+
+## Skill: code-review-guide
+| Section | Classification | Keep? |
+|---------|---------------|-------|
+| Review Checklist | Core Rule | ✅ |
+| Review Etiquette | Background | ⚠️ |
+| Blocking Issues | Core Rule | ✅ |
+
+## Skill: vercel-deploy
+| Section | Classification | Keep? |
+|---------|---------------|-------|
+| Build Settings | Core Rule | ✅ |
+| Environment Variables | Core Rule | ✅ |
+| Domain & Routing | Template | ⚠️ |
+
+## Skill: typescript-strict
+| Section | Classification | Keep? |
+|---------|---------------|-------|
+| Type Rules | Core Rule | ✅ |
+| Generics | Background | ⚠️ |
+| Null Safety | Core Rule | ✅ |
+
+## Skill: debugging-protocol
+| Section | Classification | Keep? |
+|---------|---------------|-------|
+| Step 1: Reproduce | Core Rule | ✅ |
+| Step 2: Isolate | Core Rule | ✅ |
+| Step 3: Fix & Verify | Core Rule | ✅ |
+
+---
+
+## Overall Statistics
+| Classification | Count | Percentage |
+|---------------|-------|------------|
+| Core Rule | 17 | 70.8% |
+| Background | 2 | 8.3% |
+| Example | 1 | 4.2% |
+| Template | 1 | 4.2% |
+| Redundant | 0 | 0% |
+
+**Total sections analyzed:** 24
+**Core rules:** 17/24 (70.8%)
+
+## Recommended Budget
+- Current total: ~994 tokens
+- Core-only: ~705 tokens (70%)
+- Recommended: ~800 tokens (80% retention)
+- Aggressive: ~500 tokens (50% retention)`
+      setResult(analysisReport); setPhase('done'); setLoading(false)
+      return
+    }
+
+    // Fusion mode (default)
     // Phase 1: Simulate classification with delay
     setPhase('classifying')
     await new Promise(r => setTimeout(r, 1200))
@@ -534,7 +620,7 @@ export default function App() {
       return `${header}\n${g.items.map(it => `\n## ${it.name}\n${it.content}`).join('\n')}`
     }).join('\n\n')
     setResult(allResults); setPhase('done'); setLoading(false)
-  }, [ratio])
+  }, [ratio, mode])
 
   /* ─── Persist ─── */
   useEffect(() => { saveJSON('providers', providers) }, [providers])
