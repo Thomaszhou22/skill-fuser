@@ -936,7 +936,7 @@ Output ONLY valid JSON array: [{"name":"...","category":"..."}]. No explanation,
             </div>
             <button onClick={() => { setSkills([{ id: uid(), name: '', content: '' }]); setResult(''); setFusionGroups([]); setPhase('idle'); setError(''); setRatio(50) }} className="px-3 py-1.5 rounded-lg text-[11px] font-medium bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow shadow-amber-500/20 hover:from-amber-400 hover:to-amber-500 transition">Clear</button>
           </>)}
-          {outTok > 0 && (
+          {outTok > 0 && mode === 'fusion' && (
             <div className="ml-auto flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-50 border border-green-200">
               <span className="text-[11px] text-green-600 font-medium">{compressionRatio}% compressed</span>
               <span className="text-[10px] text-green-500 font-mono">{outTok} tok</span>
