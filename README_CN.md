@@ -20,6 +20,21 @@
 
 Markdown Fuser 是一个 AI 驱动的工具，用于将多个 AI Agent 的 SKILL.md 文件合并压缩为优化输出。基于 [SkillReducer](https://arxiv.org/abs/2603.29919) 研究论文——研究发现 Skill 文件中只有 **38.5%** 是可执行的核心规则，删除非核心内容后 Agent 表现反而 **提升 2.8%**。
 
+## 截图演示
+
+<table>
+  <tr>
+    <td align="center"><b>Fusion 50%</b></td>
+    <td align="center"><b>Fusion 90%</b></td>
+    <td align="center"><b>Analysis</b></td>
+  </tr>
+  <tr>
+    <td><img src="docs/demo-fusion-50.png" alt="Fusion 50% demo" width="400" /></td>
+    <td><img src="docs/demo-fusion-90.png" alt="Fusion 90% demo" width="400" /></td>
+    <td><img src="docs/demo-analyze.png" alt="Analysis demo" width="400" /></td>
+  </tr>
+</table>
+
 ## 工作原理
 
 ### 合并压缩模式（核心功能）
